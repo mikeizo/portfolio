@@ -8,7 +8,7 @@ import Box from '@material-ui/core/Box'
 import Grid from '@material-ui/core/Grid'
 import PageTitle from '../components/PageTitle'
 
-export async function getServerSideProps() {
+export async function getStaticProps() {
   const { db } = await connectToDatabase()
   const settings = await db.collection('settings').findOne({})
   const about = await db
@@ -21,7 +21,8 @@ export async function getServerSideProps() {
     props: {
       settings: JSON.parse(JSON.stringify(settings)),
       about: JSON.parse(JSON.stringify(about))
-    }
+    },
+    revalidate: 60 // In seconds
   }
 }
 

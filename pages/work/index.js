@@ -6,7 +6,7 @@ import Box from '@material-ui/core/Box'
 import PageTitle from '../../components/PageTitle'
 import { Zoom } from 'react-reveal'
 
-export async function getServerSideProps() {
+export async function getStaticProps() {
   const { db } = await connectToDatabase()
 
   const work = await db
@@ -19,7 +19,8 @@ export async function getServerSideProps() {
   return {
     props: {
       work: JSON.parse(JSON.stringify(work))
-    }
+    },
+    revalidate: 60 // In seconds
   }
 }
 

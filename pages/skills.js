@@ -8,7 +8,7 @@ import { CircularProgressbar, buildStyles } from 'react-circular-progressbar'
 import 'react-circular-progressbar/dist/styles.css'
 import 'devicon'
 
-export async function getServerSideProps() {
+export async function getStaticProps() {
   const { db } = await connectToDatabase()
 
   const skills = await db.collection('skills').find({}).toArray()
@@ -18,7 +18,8 @@ export async function getServerSideProps() {
     props: {
       skills: JSON.parse(JSON.stringify(skills)),
       experience: JSON.parse(JSON.stringify(experience))
-    }
+    },
+    revalidate: 60 // In seconds
   }
 }
 
