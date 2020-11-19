@@ -1,8 +1,8 @@
 import { useEffect } from 'react'
-import gsap from 'gsap'
 import Head from 'next/head'
 import Box from '@material-ui/core/Box'
 import Astronaut from '../components/Astronaut'
+import gsap from 'gsap'
 
 export default function Home() {
   useEffect(() => {

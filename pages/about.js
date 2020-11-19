@@ -1,12 +1,13 @@
-import { connectToDatabase } from '../util/mongodb'
-import { useEffect } from 'react'
-import { Fade } from 'react-reveal'
-import { gsap } from 'gsap/dist/gsap'
-import { ScrollTrigger } from 'gsap/dist/ScrollTrigger'
 import Head from 'next/head'
 import Box from '@material-ui/core/Box'
 import Grid from '@material-ui/core/Grid'
+import Footer from '../components/Footer'
 import PageTitle from '../components/PageTitle'
+import { connectToDatabase } from '../util/mongodb'
+import { Fade } from 'react-reveal'
+import { gsap } from 'gsap/dist/gsap'
+import { ScrollTrigger } from 'gsap/dist/ScrollTrigger'
+import { useEffect } from 'react'
 
 export async function getStaticProps() {
   const { db } = await connectToDatabase()
@@ -137,6 +138,7 @@ export default function About({ settings, about }) {
       <Box className="timeline" mt={5} mb={10}>
         <TimelineItems items={about} />
       </Box>
+      <Footer />
     </>
   )
 }

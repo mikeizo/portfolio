@@ -1,9 +1,10 @@
-import { connectToDatabase } from '../util/mongodb'
 import Head from 'next/head'
 import Box from '@material-ui/core/Box'
 import Grid from '@material-ui/core/Grid'
-import PageTitle from '../components/PageTitle'
 import ChangingProgressProvider from '../components/ChangingProgressProvider'
+import Footer from '../components/Footer'
+import PageTitle from '../components/PageTitle'
+import { connectToDatabase } from '../util/mongodb'
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar'
 import 'react-circular-progressbar/dist/styles.css'
 import 'devicon'
@@ -87,6 +88,7 @@ export default function Skills({ skills, experience }) {
       >
         <ExperienceItems items={experience} />
       </Box>
+      <Footer />
     </>
   )
 }

@@ -1,9 +1,10 @@
-import { connectToDatabase } from '../../util/mongodb'
-import Link from 'next/link'
 import Head from 'next/head'
+import Link from 'next/link'
 import Grid from '@material-ui/core/Grid'
 import Box from '@material-ui/core/Box'
 import PageTitle from '../../components/PageTitle'
+import Footer from '../../components/Footer'
+import { connectToDatabase } from '../../util/mongodb'
 import { Zoom } from 'react-reveal'
 
 export async function getStaticProps() {
@@ -63,6 +64,7 @@ export default function Work({ work }) {
       <Grid container spacing={10} id="work">
         <WorkItems items={work} />
       </Grid>
+      <Footer />
     </>
   )
 }

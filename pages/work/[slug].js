@@ -1,10 +1,11 @@
-import { connectToDatabase } from '../../util/mongodb'
 import Head from 'next/head'
 import Box from '@material-ui/core/Box'
 import Grid from '@material-ui/core/Grid'
+import Footer from '../../components/Footer'
+import PageTitle from '../../components/PageTitle'
+import { connectToDatabase } from '../../util/mongodb'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import SwiperCore, { Navigation, Pagination, Autoplay } from 'swiper'
-import PageTitle from '../../components/PageTitle'
 
 SwiperCore.use([Navigation, Pagination, Autoplay])
 
@@ -53,8 +54,8 @@ export default function Work({ work }) {
                 spaceBetween={30}
                 slidesPerView={1}
                 navigation
-                //pagination
                 autoplay
+                //pagination
               >
                 {work.images.map((item, index) => (
                   <SwiperSlide key={index}>
@@ -67,7 +68,9 @@ export default function Work({ work }) {
                 ))}
               </Swiper>
             ) : (
-              <img className="img-fluid" src="/img/default.gif" />
+              <Box px={5}>
+                <img className="img-fluid" src="/img/default.gif" />
+              </Box>
             )}
           </Grid>
           <Grid item xs={12} md={3}>
@@ -102,6 +105,7 @@ export default function Work({ work }) {
           </Grid>
         </Grid>
       </Box>
+      <Footer />
     </>
   )
 }

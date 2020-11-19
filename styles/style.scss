@@ -32,8 +32,13 @@ p {
 }
 
 hr {
-border-bottom: 2px solid white;
- margin: 15px 0;
+  border-bottom: 2px solid $white;
+  margin: 15px 0;
+}
+
+footer hr {
+  border-bottom: 1px solid $white;
+  opacity: 0.1;
 }
 
 ul {
