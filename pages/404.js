@@ -13,7 +13,7 @@ export default function Home() {
       <div className="container">
         <Box textAlign="center" mb={5}>
           <h1>404</h1>
-          <h4>This page might be lost in space</h4>
+          <h4>Sorry, this page might seems to be lost in space</h4>
         </Box>
         <Box textAlign="center" mb={5}>
           <Link href="/">
