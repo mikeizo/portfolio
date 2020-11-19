@@ -23,9 +23,7 @@ export default function Layout({ children }) {
       <div className="stars" id="stars-lg"></div>
       <Header />
       <Container>
-        <Box p={3}>
-          <main>{children}</main>
-        </Box>
+        <main>{children}</main>
       </Container>
     </Box>
   )

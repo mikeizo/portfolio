@@ -78,7 +78,6 @@
   overflow-y: hidden;
   -ms-overflow-style: none;
   scrollbar-width: none;
-  
 
   &:after {
     content: "";
@@ -89,40 +88,41 @@
     bottom: 0;
     left: 50%;
     margin-left: -1px;
+    z-index: -1;
   }
-  @media only screen and (min-width: 767px) {
+  @media only screen and (min-width: 769px) {
     &:after {
-      left: 30%;
+      left: 24%;
     }
   }
   .timeline-item {
     padding: 25px 0;
     .timeline-year {
+      height: 150px;
+      width: 150px;
+      border-radius: 100px;
       margin: auto;
-      div {
-        font-weight: 300;
-        font-size: 2rem;
-        background-color: #ffffff;
-        color: #202328;
-        border-radius: 100px;
-        height: 150px;
-        width: 150px;
-        text-align: center;
-        line-height: 9.5rem;
-        @media only screen and (min-width: 767px) {
-          margin: auto;
-        }
+      background-color: #ffffff;
+      color: #202328;
+      text-align: center;
+      font-weight: 300;
+      font-size: 2rem;
+      line-height: 1.5rem;
+      span {
+        font-size: 1rem;
+        line-height: 2rem;
       }
     }
     .timeline-description {
-      position: relative;
-      padding: 30px 0;
-      margin: auto 0;
-      z-index: 1;
-      @media only screen and (max-width: 767px) {
-        background-color: $black;
+      height: 100%;
+      @media only screen and (max-width: 768px) {
+        margin: 30px 0;
         text-align: center;
-        width: 100%;
+        div {
+          width: 100%;
+          padding: 15px 0;
+          background-color: $black;
+        }
       }
     }
   }

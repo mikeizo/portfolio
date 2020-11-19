@@ -27,7 +27,7 @@ export default function Home() {
   return (
     <>
       <div id="astronaut">
-        <img src="/img/astronaut.svg" />
+        <img alt="astronaut" src="/img/astronaut.svg" />
       </div>
       <Box className="fixed">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1366 1020">

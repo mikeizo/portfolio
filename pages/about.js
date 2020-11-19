@@ -11,7 +11,11 @@ import PageTitle from '../components/PageTitle'
 export async function getServerSideProps() {
   const { db } = await connectToDatabase()
   const settings = await db.collection('settings').findOne({})
-  const about = await db.collection('about').find({}).toArray()
+  const about = await db
+    .collection('about')
+    .find({})
+    .sort({ year_from: 1 })
+    .toArray()
 
   return {
     props: {
@@ -29,8 +33,8 @@ function TimelineItems(about) {
       gsap.from(year, {
         scrollTrigger: {
           trigger: year,
-          start: 'top 80%',
-          end: 'bottom 90%',
+          start: 'top 70%',
+          end: 'bottom 80%',
           scrub: 1
           //markers: true
         },
@@ -45,8 +49,8 @@ function TimelineItems(about) {
       gsap.from(year, {
         scrollTrigger: {
           trigger: year,
-          start: 'top 80%',
-          end: 'bottom 90%',
+          start: 'top 70%',
+          end: 'bottom 80%',
           scrub: 1
           //markers: true
         },
@@ -60,17 +64,38 @@ function TimelineItems(about) {
 
   const timelineItems = about.items.map((item) => {
     return (
-      <Grid
-        container
-        key={item._id}
-        className="timeline-item"
-        justify="space-between"
-      >
-        <Grid item className="timeline-year" sm={3}>
-          <Box>{item.year_from}</Box>
+      <Grid container key={item._id} className="timeline-item" justify="center">
+        <Grid item sm={12} md={2}>
+          <Box
+            className="timeline-year"
+            display="flex"
+            flexWrap="wrap"
+            flexDirection="column"
+            justifyContent="center"
+            alignItems="center"
+          >
+            {item.year_to ? (
+              <>
+                <Box>{item.year_from}</Box>
+                <Box>
+                  <span>to</span>
+                </Box>
+                <Box>{item.year_to}</Box>
+              </>
+            ) : (
+              <Box>{item.year_from}</Box>
+            )}
+          </Box>
         </Grid>
-        <Grid item sm={8} className="timeline-description">
-          <Box dangerouslySetInnerHTML={{ __html: item.description }} />
+        <Grid item sm={12} md={1}></Grid>
+        <Grid item sm={12} md={8}>
+          <Box
+            className="timeline-description"
+            display="flex"
+            alignItems="center"
+          >
+            <Box dangerouslySetInnerHTML={{ __html: item.description }} />
+          </Box>
         </Grid>
       </Grid>
     )
