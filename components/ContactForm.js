@@ -1,6 +1,8 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import axios from 'axios'
+import MaskedInput from 'react-text-mask'
+import PropTypes from 'prop-types'
 import Grid from '@material-ui/core/Grid'
 import Box from '@material-ui/core/Box'
 import TextField from '@material-ui/core/TextField'
@@ -10,8 +12,6 @@ import DialogContent from '@material-ui/core/DialogContent'
 import IconButton from '@material-ui/core/IconButton'
 import CloseIcon from '@material-ui/icons/Close'
 import CircularProgress from '@material-ui/core/CircularProgress'
-import MaskedInput from 'react-text-mask'
-import PropTypes from 'prop-types'
 import Input from '@material-ui/core/Input'
 import InputLabel from '@material-ui/core/InputLabel'
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles'
@@ -82,7 +82,6 @@ export default function ContactForm({ contactChange, contact }) {
       className="contact-form"
       open={contact}
       onClose={contactChange}
-      aria-labelledby="form-dialog-title"
       maxWidth="xs"
     >
       <Box position="absolute" right={2} top={2}>

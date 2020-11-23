@@ -19,9 +19,10 @@ body {
 }
 a {
   color: $white;
-  //text-decoration: none;
+  text-decoration: underline;
   -webkit-transition: ease-in-out 0.3s;
   transition: ease-in-out 0.3s;
+  cursor: pointer;
   &:hover {
     color: $gray;
   }

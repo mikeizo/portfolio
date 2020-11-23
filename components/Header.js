@@ -8,11 +8,7 @@ export default function Header() {
   return (
     <header>
       <Box component="nav" p={5}>
-        <Grid
-          container
-          direction="row"
-          justify="space-between"
-        >
+        <Grid container direction="row" justify="space-between">
           <Grid item>
             <Link href="/">
               <a>
