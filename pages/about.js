@@ -1,13 +1,15 @@
-import Head from 'next/head'
-import Box from '@material-ui/core/Box'
-import Grid from '@material-ui/core/Grid'
-import Footer from '../components/Footer'
-import PageTitle from '../components/PageTitle'
+import { useState } from 'react'
+import { useEffect } from 'react'
 import { connectToDatabase } from '../util/mongodb'
 import { Fade } from 'react-reveal'
 import { gsap } from 'gsap/dist/gsap'
 import { ScrollTrigger } from 'gsap/dist/ScrollTrigger'
-import { useEffect } from 'react'
+import Head from 'next/head'
+import Box from '@material-ui/core/Box'
+import Dialog from '@material-ui/core/Dialog'
+import Grid from '@material-ui/core/Grid'
+import Footer from '../components/Footer'
+import PageTitle from '../components/PageTitle'
 
 export async function getStaticProps() {
   const { db } = await connectToDatabase()
@@ -27,86 +29,120 @@ export async function getStaticProps() {
   }
 }
 
-function TimelineItems(about) {
-  useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger)
-
-    gsap.utils.toArray('.timeline-year').forEach((year) => {
-      gsap.from(year, {
-        scrollTrigger: {
-          trigger: year,
-          start: 'top 70%',
-          end: 'bottom 80%',
-          scrub: 1
-          //markers: true
-        },
-        x: -100,
-        opacity: 0,
-        ease: 'none',
-        duration: 3
-      })
-    })
-
-    gsap.utils.toArray('.timeline-description').forEach((year) => {
-      gsap.from(year, {
-        scrollTrigger: {
-          trigger: year,
-          start: 'top 70%',
-          end: 'bottom 80%',
-          scrub: 1
-          //markers: true
-        },
-        x: 100,
-        opacity: 0,
-        ease: 'none',
-        duration: 3
-      })
-    })
-  }, [])
-
-  const timelineItems = about.items.map((item) => {
-    return (
-      <Grid container key={item._id} className="timeline-item" justify="center">
-        <Grid item sm={12} md={2}>
-          <Box
-            className="timeline-year"
-            display="flex"
-            flexWrap="wrap"
-            flexDirection="column"
-            justifyContent="center"
-            alignItems="center"
-          >
-            {item.year_to ? (
-              <>
-                <Box>{item.year_from}</Box>
-                <Box>
-                  <span>to</span>
-                </Box>
-                <Box>{item.year_to}</Box>
-              </>
-            ) : (
-              <Box>{item.year_from}</Box>
-            )}
-          </Box>
-        </Grid>
-        <Grid item sm={12} md={1}></Grid>
-        <Grid item sm={12} md={8}>
-          <Box
-            className="timeline-description"
-            display="flex"
-            alignItems="center"
-          >
-            <Box dangerouslySetInnerHTML={{ __html: item.description }} />
-          </Box>
-        </Grid>
-      </Grid>
-    )
-  })
-
-  return timelineItems
-}
-
 export default function About({ settings, about }) {
+  const [open, setOpen] = useState(false)
+  const [portfolio, setPortfolio] = useState('')
+
+  function openDialog(value) {
+    setPortfolio(value)
+    setOpen(true)
+  }
+  function closeDialog() {
+    setOpen(false)
+  }
+
+  function Modal() {
+    return (
+      <Dialog open={open} onClose={closeDialog} maxWidth="lg">
+        <img
+          src={`/img/old-sites/${portfolio}`}
+          alt="Portfolio"
+          className="img-fluid"
+        />
+      </Dialog>
+    )
+  }
+
+  function TimelineItems(about) {
+    useEffect(() => {
+      gsap.registerPlugin(ScrollTrigger)
+      gsap.utils.toArray('.timeline-year').forEach((year) => {
+        gsap.from(year, {
+          scrollTrigger: {
+            trigger: year,
+            start: 'top 70%',
+            end: 'bottom 80%',
+            scrub: 1
+            //markers: true
+          },
+          x: -100,
+          opacity: 0,
+          ease: 'none',
+          duration: 3
+        })
+      })
+
+      gsap.utils.toArray('.timeline-description').forEach((year) => {
+        gsap.from(year, {
+          scrollTrigger: {
+            trigger: year,
+            start: 'top 70%',
+            end: 'bottom 80%',
+            scrub: 1
+            //markers: true
+          },
+          x: 100,
+          opacity: 0,
+          ease: 'none',
+          duration: 3
+        })
+      })
+    }, [])
+
+    const timelineItems = about.items.map((item) => {
+      return (
+        <Grid
+          container
+          key={item._id}
+          className="timeline-item"
+          justify="center"
+        >
+          <Grid item sm={12} md={2}>
+            <Box
+              className="timeline-year"
+              display="flex"
+              flexWrap="wrap"
+              flexDirection="column"
+              justifyContent="center"
+              alignItems="center"
+            >
+              {item.year_to ? (
+                <>
+                  <Box>{item.year_from}</Box>
+                  <Box>
+                    <span>to</span>
+                  </Box>
+                  <Box>{item.year_to}</Box>
+                </>
+              ) : (
+                <Box>{item.year_from}</Box>
+              )}
+            </Box>
+          </Grid>
+          <Grid item sm={12} md={1}></Grid>
+          <Grid item sm={12} md={8}>
+            <Box
+              className="timeline-description"
+              display="flex"
+              alignItems="center"
+            >
+              <Box>
+                {item.description}
+                {item.image && (
+                  <>
+                    <span>&nbsp;-&nbsp;</span>
+                    <a onClick={() => openDialog(item.image)}>View</a>
+                  </>
+                )}
+              </Box>
+            </Box>
+          </Grid>
+        </Grid>
+      )
+    })
+    return timelineItems
+  }
+
   return (
     <>
       <Head>
@@ -137,6 +173,7 @@ export default function About({ settings, about }) {
       </Box>
       <Box className="timeline" mt={5} mb={10}>
         <TimelineItems items={about} />
+        <Modal />
       </Box>
       <Footer />
     </>
