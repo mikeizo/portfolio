@@ -61,6 +61,7 @@ export default function ContactForm({ contactChange, contact }) {
   }
 
   const onSubmit = async (data) => {
+    preventDefault()
     setSubmitting(true)
     await axios
       .post('/api/mail', { data })
@@ -79,6 +80,7 @@ export default function ContactForm({ contactChange, contact }) {
 
   return (
     <Dialog
+      id="app"
       className="contact-form"
       open={contact}
       onClose={contactChange}

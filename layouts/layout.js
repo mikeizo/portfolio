@@ -17,7 +17,7 @@ export default function Layout({ children }) {
   */
 
   return (
-    <Box id="smooth-scrollbar">
+    <Box id="app">
       <div className="stars" id="stars-sm"></div>
       <div className="stars" id="stars-md"></div>
       <div className="stars" id="stars-lg"></div>

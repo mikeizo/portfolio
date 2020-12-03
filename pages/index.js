@@ -62,7 +62,7 @@ export default function Home() {
         <Box>
           <h1 className="title-home">
             Developer <br />
-            &&nbsp;Designer
+            &amp;&nbsp;Designer
           </h1>
         </Box>
       </Box>

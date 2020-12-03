@@ -61,7 +61,7 @@ export default function Work({ work }) {
         <title>Work | {process.env.siteTitle}</title>
       </Head>
       <PageTitle>Work</PageTitle>
-      <Grid container spacing={10} id="work">
+      <Grid container spacing={4} id="work">
         <WorkItems items={work} />
       </Grid>
       <Footer />
