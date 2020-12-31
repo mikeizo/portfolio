@@ -4,6 +4,7 @@ import Head from 'next/head'
 import Layout from '../layouts/layout'
 import Admin from '../layouts/admin'
 import '../styles/style.scss'
+import * as gtag from '../util/gtag'
 
 export default function MyApp({ Component, pageProps, router }) {
   useEffect(() => {
@@ -13,6 +14,16 @@ export default function MyApp({ Component, pageProps, router }) {
       jssStyles.parentElement.removeChild(jssStyles)
     }
   }, [])
+
+  useEffect(() => {
+    const handleRouteChange = (url) => {
+      gtag.pageview(url)
+    }
+    router.events.on('routeChangeComplete', handleRouteChange)
+    return () => {
+      router.events.off('routeChangeComplete', handleRouteChange)
+    }
+  }, [router.events])
 
   if (router.pathname.startsWith('/admin')) {
     return (
