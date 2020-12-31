@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import Head from 'next/head'
 import Layout from '../layouts/layout'
+import Admin from '../layouts/admin'
 import '../styles/style.scss'
 
 export default function MyApp({ Component, pageProps, router }) {
@@ -22,7 +23,13 @@ export default function MyApp({ Component, pageProps, router }) {
             content="minimum-scale=1, initial-scale=1, width=device-width"
           />
         </Head>
-        <Component {...pageProps} />
+        {router.pathname.startsWith('/admin/login') ? (
+          <Component {...pageProps} />
+        ) : (
+          <Admin>
+            <Component {...pageProps} />
+          </Admin>
+        )}
       </React.Fragment>
     )
   } else {

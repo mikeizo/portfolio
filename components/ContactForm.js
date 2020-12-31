@@ -3,7 +3,6 @@ import { useForm } from 'react-hook-form'
 import axios from 'axios'
 import MaskedInput from 'react-text-mask'
 import PropTypes from 'prop-types'
-import Grid from '@material-ui/core/Grid'
 import Box from '@material-ui/core/Box'
 import TextField from '@material-ui/core/TextField'
 import Dialog from '@material-ui/core/Dialog'
@@ -45,9 +44,8 @@ function TextMaskCustom(props) {
 
 export default function ContactForm({ contactChange, contact }) {
   const [submitting, setSubmitting] = useState(false)
-  const [formCompleted, setFormCompleted] = useState(false)
+  const [formMessage, setFormMessage] = useState('')
   const { register, handleSubmit, errors, reset } = useForm()
-  //const { inputRef, ...other } = props
 
   const [values, setValues] = useState({
     textmask: '(  )    -    '
@@ -61,17 +59,16 @@ export default function ContactForm({ contactChange, contact }) {
   }
 
   const onSubmit = async (data) => {
-    preventDefault()
     setSubmitting(true)
     await axios
       .post('/api/mail', { data })
       .then(function (response) {
         reset()
-        setFormCompleted(true)
+        setFormMessage('Your Form has been submitted')
         return response.data
       })
-      .catch(function (error) {
-        console.log(error)
+      .catch(function () {
+        setFormMessage('Sorry, an error occurred')
       })
       .finally(function () {
         setSubmitting(false)
@@ -84,7 +81,7 @@ export default function ContactForm({ contactChange, contact }) {
       className="contact-form"
       open={contact}
       onClose={contactChange}
-      maxWidth="xs"
+      maxWidth="sm"
     >
       <Box position="absolute" right={2} top={2}>
         <IconButton aria-label="close" onClick={contactChange}>
@@ -100,75 +97,66 @@ export default function ContactForm({ contactChange, contact }) {
       <form onSubmit={handleSubmit(onSubmit)}>
         <DialogContent>
           <ThemeProvider theme={theme}>
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <TextField
-                  inputRef={register({
-                    required: 'Name is required',
-                    minLength: {
-                      value: 3,
-                      message: 'Name must be longer than 2 characters'
-                    },
-                    maxLength: {
-                      value: 30,
-                      message: 'Name must be less than 30 characters'
-                    }
-                  })}
-                  name="name"
-                  label="Name"
-                  fullWidth
-                  error={errors.name ? true : false}
-                  helperText={errors.name ? errors.name.message : ' '}
-                  color="primary"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  inputRef={register({
-                    required: 'Email is required',
-                    pattern: {
-                      value: /^[A-Z0-9._-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                      message: 'Invalid email address'
-                    }
-                  })}
-                  name="email"
-                  label="Email Address"
-                  type="email"
-                  fullWidth
-                  error={errors.email ? true : false}
-                  helperText={errors.email ? errors.email.message : ' '}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <InputLabel htmlFor="phone">Phone</InputLabel>
-                <Input
-                  inputRef={register}
-                  value={values.phone}
-                  onChange={handleChange}
-                  fullWidth
-                  name="phone"
-                  id="phone"
-                  inputComponent={TextMaskCustom}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  inputRef={register}
-                  name="comments"
-                  label="Comments"
-                  variant="outlined"
-                  color="primary"
-                  rowsMax={4}
-                  multiline
-                  fullWidth
-                />
-              </Grid>
-            </Grid>
+            <Box>
+              <TextField
+                inputRef={register({
+                  required: 'Name is required',
+                  minLength: {
+                    value: 3,
+                    message: 'Name must be longer than 2 characters'
+                  },
+                  maxLength: {
+                    value: 30,
+                    message: 'Name must be less than 30 characters'
+                  }
+                })}
+                name="name"
+                label="Name"
+                fullWidth
+                error={errors.name ? true : false}
+                helperText={errors.name ? errors.name.message : ' '}
+                color="primary"
+              />
+              <TextField
+                inputRef={register({
+                  required: 'Email is required',
+                  pattern: {
+                    value: /^[A-Z0-9._-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                    message: 'Invalid email address'
+                  }
+                })}
+                name="email"
+                label="Email Address"
+                type="email"
+                fullWidth
+                error={errors.email ? true : false}
+                helperText={errors.email ? errors.email.message : ' '}
+              />
+              <InputLabel htmlFor="phone">Phone</InputLabel>
+              <Input
+                inputRef={register}
+                value={values.phone}
+                onChange={handleChange}
+                fullWidth
+                name="phone"
+                id="phone"
+                inputComponent={TextMaskCustom}
+              />
+              <Box mt={2}></Box>
+              <TextField
+                inputRef={register}
+                name="comments"
+                label="Comments"
+                variant="outlined"
+                color="primary"
+                rowsMax={4}
+                multiline
+                fullWidth
+              />
+            </Box>
           </ThemeProvider>
           <DialogActions>
-            {formCompleted && (
-              <span className="message">Your Form has been submitted</span>
-            )}
+            {formMessage && <span className="message">{formMessage}</span>}
             {submitting && <CircularProgress color="primary" size={20} />}
             <button
               type="submit"
