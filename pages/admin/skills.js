@@ -50,7 +50,6 @@ export default function AdminSkills({ skills }) {
         return response.data
       })
       .catch(function (error) {
-        console.log(error.response)
         setAlert(true)
         setAlertData({
           severity: 'error',
@@ -79,7 +78,7 @@ export default function AdminSkills({ skills }) {
       <form onSubmit={onSubmit}>
         <Grid container spacing={5}>
           {values.map((item, index) => (
-            <Grid key={index} item sm={12} md={6}>
+            <Grid key={index} item xs={12} sm={6}>
               <Box textAlign="center">
                 <Typography gutterBottom>{item.name}</Typography>
                 <Slider

@@ -68,7 +68,7 @@ export default function AdminSettings({ settings }) {
       <Title title="Settings" />
       <form onSubmit={handleSubmit(onSubmit)}>
         <Grid container spacing={2}>
-          <Grid item xs={5}>
+          <Grid item xs={12} md={6}>
             <TextField
               inputRef={register}
               name="email"

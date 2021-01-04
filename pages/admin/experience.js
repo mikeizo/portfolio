@@ -170,7 +170,7 @@ export default function AdminExperience({ experience }) {
           <Grid item xs={12}>
             <h4>Add Experience</h4>
           </Grid>
-          <Grid item xs={6} md={3}>
+          <Grid item xs={12} sm={5}>
             <TextField
               name="name"
               label="Name"
@@ -181,7 +181,7 @@ export default function AdminExperience({ experience }) {
               helperText={error ? 'Name is required' : ' '}
             />
           </Grid>
-          <Grid item xs={6} md={3}>
+          <Grid item xs={12} sm={5}>
             <TextField
               name="icon"
               label="Icon Class"
@@ -192,7 +192,7 @@ export default function AdminExperience({ experience }) {
               helperText={error ? 'Icon is required' : ' '}
             />
           </Grid>
-          <Grid item xs={6} md={3}>
+          <Grid item xs={12} sm={2}>
             <Fab color="primary" aria-label="add" onClick={addExperience}>
               <AddIcon />
             </Fab>

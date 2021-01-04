@@ -7,7 +7,7 @@ const handler = async (req, res) => {
   if (req.method === 'POST') {
     const { email, pass } = req.body.formData
     const { db } = await connectToDatabase()
-    const user = await db.collection('users').findOne({ email: email })
+    const user = await db.collection('users').findOne({ email: email.toLowerCase() })
 
     if (user) {
       compare(pass, user.pass, function (err, result) {
