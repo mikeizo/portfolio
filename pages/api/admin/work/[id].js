@@ -32,7 +32,7 @@ const handler = async (req, res) => {
           name: name,
           slug: slug,
           resources: resources,
-          weight: weight,
+          weight: parseInt(weight),
           url: url,
           git: git,
           description: description,

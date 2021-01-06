@@ -207,6 +207,7 @@ export default function FormWork({ work, id }) {
               name="weight"
               label="Weight"
               variant="outlined"
+              type="number"
               fullWidth
               error={errors.weight ? true : false}
               helperText={errors.weight ? errors.weight.message : ' '}
