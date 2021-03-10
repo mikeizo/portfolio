@@ -1,10 +1,27 @@
 import { useEffect } from 'react'
+import { connectToDatabase } from '../util/mongodb'
 import Head from 'next/head'
 import Box from '@material-ui/core/Box'
 import Astronaut from '../components/Astronaut'
 import gsap from 'gsap'
 
-export default function Home() {
+export async function getStaticProps() {
+  const { db } = await connectToDatabase()
+  const settings = await db.collection('settings').findOne({})
+
+  return {
+    props: {
+      settings: JSON.parse(JSON.stringify(settings))
+    },
+    revalidate: 60 // In seconds
+  }
+
+}
+
+export default function Home({ settings }) {
+  // Remove html tags
+  let stripAbout = settings.about.replace(/(<([^>]+)>)/gi, '')
+
   useEffect(() => {
     gsap.from('.vertical', {
       y: -100,
@@ -45,6 +62,9 @@ export default function Home() {
     <>
       <Head>
         <title>{process.env.siteTitle}</title>
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+        <meta name="description" content={stripAbout} />
+        <meta property="og:image" content="https://mtropea.s3.amazonaws.com/portfolio/miketropea1.png" />
       </Head>
       <Astronaut />
       <Box
