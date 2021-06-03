@@ -13,11 +13,7 @@ export async function getStaticProps() {
   const { db } = await connectToDatabase()
 
   const skills = await db.collection('skills').find({}).toArray()
-  const experience = await db
-    .collection('experience')
-    .find({})
-    .sort({ name: 1 })
-    .toArray()
+  const experience = await db.collection('experience').find({}).toArray()
 
   return {
     props: {
