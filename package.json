@@ -33,7 +33,6 @@
     "react-reveal": "^1.2.2",
     "react-text-mask": "^5.4.3",
     "sass": "^1.32.12",
-    "smooth-scrollbar": "^8.6.1",
     "swiper": "^6.5.9"
   },
   "devDependencies": {
