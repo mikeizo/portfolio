@@ -255,8 +255,8 @@ export default function EnhancedTable({ data, headCells, pageName }) {
         count={pageData.length}
         rowsPerPage={rowsPerPage}
         page={page}
-        onChangePage={handleChangePage}
-        onChangeRowsPerPage={handleChangeRowsPerPage}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
       />
     </div>
   )

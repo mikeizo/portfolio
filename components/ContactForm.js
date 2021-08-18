@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { useForm, Controller } from 'react-hook-form'
 import axios from 'axios'
 import MaskedInput from 'react-text-mask'
 import PropTypes from 'prop-types'
@@ -13,9 +13,9 @@ import CloseIcon from '@material-ui/icons/Close'
 import CircularProgress from '@material-ui/core/CircularProgress'
 import Input from '@material-ui/core/Input'
 import InputLabel from '@material-ui/core/InputLabel'
-import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles'
+import { createTheme, ThemeProvider } from '@material-ui/core/styles'
 
-const theme = createMuiTheme({
+const theme = createTheme({
   palette: {
     primary: { main: '#2A558C' }
   }
@@ -45,25 +45,24 @@ function TextMaskCustom(props) {
 export default function ContactForm({ contactChange, contact }) {
   const [submitting, setSubmitting] = useState(false)
   const [formMessage, setFormMessage] = useState('')
-  const { register, handleSubmit, errors, reset } = useForm()
-
-  const [values, setValues] = useState({
-    textmask: '(  )    -    '
-  })
-
-  const handleChange = (event) => {
-    setValues({
-      ...values,
-      [event.target.name]: event.target.value
-    })
-  }
+  const {
+    handleSubmit,
+    control,
+    reset,
+    formState: { errors }
+  } = useForm()
 
   const onSubmit = async (data) => {
     setSubmitting(true)
     await axios
       .post('/api/mail', { data })
       .then(function (response) {
-        reset()
+        reset({
+          name: '',
+          email: '',
+          phone: '',
+          comments: ''
+        })
         setFormMessage('Your Form has been submitted')
         return response.data
       })
@@ -78,10 +77,10 @@ export default function ContactForm({ contactChange, contact }) {
   return (
     <Dialog
       id="app"
-      className="contact-form"
+      fullWidth={true}
+      maxWidth="xs"
       open={contact}
       onClose={contactChange}
-      maxWidth="sm"
     >
       <Box position="absolute" right={2} top={2}>
         <IconButton aria-label="close" onClick={contactChange}>
@@ -98,9 +97,12 @@ export default function ContactForm({ contactChange, contact }) {
         <DialogContent>
           <ThemeProvider theme={theme}>
             <Box>
-              <TextField
-                inputRef={register({
-                  required: 'Name is required',
+              <Controller
+                name="name"
+                defaultValue=""
+                control={control}
+                rules={{
+                  required: 'Name is Required',
                   minLength: {
                     value: 3,
                     message: 'Name must be longer than 2 characters'
@@ -109,49 +111,77 @@ export default function ContactForm({ contactChange, contact }) {
                     value: 30,
                     message: 'Name must be less than 30 characters'
                   }
-                })}
-                name="name"
-                label="Name"
-                fullWidth
-                error={errors.name ? true : false}
-                helperText={errors.name ? errors.name.message : ' '}
-                color="primary"
+                }}
+                render={({ field }) => (
+                  <TextField
+                    label="*Name"
+                    color="primary"
+                    error={errors.name ? true : false}
+                    helperText={errors.name ? errors.name.message : ' '}
+                    fullWidth
+                    {...field}
+                  />
+                )}
               />
-              <TextField
-                inputRef={register({
+              <Controller
+                name="email"
+                defaultValue=""
+                control={control}
+                rules={{
                   required: 'Email is required',
                   pattern: {
                     value: /^[A-Z0-9._-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
                     message: 'Invalid email address'
                   }
-                })}
-                name="email"
-                label="Email Address"
-                type="email"
-                fullWidth
-                error={errors.email ? true : false}
-                helperText={errors.email ? errors.email.message : ' '}
+                }}
+                render={({ field }) => (
+                  <TextField
+                    label="*Email"
+                    color="primary"
+                    error={errors.email ? true : false}
+                    helperText={errors.email ? errors.email.message : ' '}
+                    fullWidth
+                    {...field}
+                  />
+                )}
               />
               <InputLabel htmlFor="phone">Phone</InputLabel>
-              <Input
-                inputRef={register}
-                value={values.phone}
-                onChange={handleChange}
-                fullWidth
+              <Controller
                 name="phone"
-                id="phone"
-                inputComponent={TextMaskCustom}
+                defaultValue=""
+                control={control}
+                rules={{
+                  pattern: {
+                    value: /^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}$/,
+                    message: 'Invalid phone number'
+                  }
+                }}
+                render={({ field }) => (
+                  <Input
+                    color="primary"
+                    error={errors.phone ? true : false}
+                    inputComponent={TextMaskCustom}
+                    fullWidth
+                    {...field}
+                  />
+                )}
               />
-              <Box mt={2}></Box>
-              <TextField
-                inputRef={register}
+              <Box mt={4}></Box>
+              <Controller
                 name="comments"
-                label="Comments"
-                variant="outlined"
-                color="primary"
-                rowsMax={4}
-                multiline
-                fullWidth
+                defaultValue=""
+                control={control}
+                render={({ field }) => (
+                  <TextField
+                    label="Comments"
+                    color="primary"
+                    variant="outlined"
+                    maxRows={4}
+                    multiline
+                    fullWidth
+                    {...field}
+                  />
+                )}
               />
             </Box>
           </ThemeProvider>

@@ -95,7 +95,7 @@ export default function About({ settings, about }) {
           container
           key={item._id}
           className="timeline-item"
-          justify="center"
+          justifyContent="center"
         >
           <Grid item sm={12} md={2}>
             <Box
@@ -149,7 +149,7 @@ export default function About({ settings, about }) {
         <title>About | {process.env.siteTitle}</title>
       </Head>
       <PageTitle>About Me</PageTitle>
-      <Grid container spacing={5} justify="space-between">
+      <Grid container spacing={5} justifyContent="space-between">
         <Grid item xs={12} sm={8} md={8}>
           <Fade left>
             <div dangerouslySetInnerHTML={{ __html: settings.about }} />

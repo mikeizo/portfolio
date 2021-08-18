@@ -63,7 +63,10 @@ export default function Home({ settings }) {
         <title>{process.env.siteTitle}</title>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
         <meta name="description" content={stripAbout} />
-        <meta property="og:image" content="https://mtropea.s3.amazonaws.com/portfolio/miketropea1.png" />
+        <meta
+          property="og:image"
+          content="https://mtropea.s3.amazonaws.com/portfolio/miketropea1.png"
+        />
       </Head>
       <Astronaut />
       <Box

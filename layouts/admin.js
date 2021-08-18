@@ -20,11 +20,11 @@ import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
 import { makeStyles } from '@material-ui/core/styles'
 import { mainListItems } from '../components/admin/Menu'
-import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles'
+import { createTheme, ThemeProvider } from '@material-ui/core/styles'
 
 const drawerWidth = 240
 
-const theme = createMuiTheme({
+const theme = createTheme({
   palette: {
     primary: { main: '#2A558C' }
   }

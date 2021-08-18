@@ -78,7 +78,7 @@ export default function Skills({ skills, experience }) {
         <title>Skills | {process.env.siteTitle}</title>
       </Head>
       <PageTitle>Skills</PageTitle>
-      <Grid container spacing={5} justify="center">
+      <Grid container spacing={5} justifyContent="center">
         <SkillItems items={skills} />
       </Grid>
       <Box textAlign="center" pt={10} pb={2}>

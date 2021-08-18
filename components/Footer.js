@@ -9,7 +9,12 @@ export default function Footer() {
     <footer>
       <hr />
       <Box px={5} py={2}>
-        <Grid container direction="column" justify="center" alignItems="center">
+        <Grid
+          container
+          direction="column"
+          justifyContent="center"
+          alignItems="center"
+        >
           <Grid item>
             <Image
               src="/img/logo-w-small.png"
