@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import Link from 'next/link'
 import Router from 'next/router'
 import axios from 'axios'
 import clsx from 'clsx'
@@ -37,12 +38,14 @@ const useStyles = makeStyles((theme) => ({
   toolbar: {
     paddingRight: 24 // keep right padding when drawer closed
   },
-  toolbarIcon: {
+  toolbarLogo: {
+    cursor: 'pointer'
+  },
+  toolbarTop: {
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'flex-end',
-    padding: '0 8px',
-    ...theme.mixins.toolbar
+    justifyContent: 'space-between',
+    padding: '5px 15px'
   },
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
@@ -188,7 +191,10 @@ export default function Admin({ children }) {
           }}
           open={open}
         >
-          <div className={classes.toolbarIcon}>
+          <div className={classes.toolbarTop}>
+            <Link href="/">
+              <img className={classes.toolbarLogo} src="/img/mtropea-logo.png" width="150" />
+            </Link>
             <IconButton onClick={handleDrawer}>
               <ChevronLeftIcon />
             </IconButton>

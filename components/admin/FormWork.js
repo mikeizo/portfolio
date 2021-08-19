@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { useForm, Controller } from 'react-hook-form'
 import { useRouter } from 'next/router'
 import axios from 'axios'
 import ChipInput from 'material-ui-chip-input'
@@ -56,7 +56,11 @@ export default function FormWork({ work, id }) {
   const [images, setImages] = useState(work.images)
   const [alert, setAlert] = useState(false)
   const [alertData, setAlertData] = useState({})
-  const { register, handleSubmit, errors } = useForm()
+  const {
+    handleSubmit,
+    control,
+    formState: { errors }
+  } = useForm()
 
   const handleResources = (data) => {
     setResources(data)
@@ -140,8 +144,10 @@ export default function FormWork({ work, id }) {
       <Grid container spacing={4}>
         <Grid item spacing={2} container xs={12} md={8}>
           <Grid item xs={12} md={6}>
-            <TextField
-              inputRef={register({
+            <Controller
+              name="name"
+              defaultValue={work.name}
+              rules={{
                 required: 'Name is required',
                 minLength: {
                   value: 3,
@@ -151,19 +157,25 @@ export default function FormWork({ work, id }) {
                   value: 30,
                   message: 'Name must be less than 30 characters'
                 }
-              })}
-              defaultValue={work.name}
-              name="name"
-              label="Name"
-              variant="outlined"
-              fullWidth
-              error={errors.name ? true : false}
-              helperText={errors.name ? errors.name.message : ' '}
+              }}
+              control={control}
+              render={({ field }) => (
+                <TextField
+                  label="Name"
+                  variant="outlined"
+                  fullWidth
+                  error={errors.name ? true : false}
+                  helperText={errors.name ? errors.name.message : ' '}
+                  {...field}
+                />
+              )}
             />
           </Grid>
           <Grid item xs={12} md={6}>
-            <TextField
-              inputRef={register({
+            <Controller
+              name="slug"
+              defaultValue={work.slug}
+              rules={{
                 required: 'Slug is required',
                 minLength: {
                   value: 3,
@@ -173,19 +185,22 @@ export default function FormWork({ work, id }) {
                   value: 30,
                   message: 'Name must be less than 30 characters'
                 }
-              })}
-              name="slug"
-              label="Slug"
-              variant="outlined"
-              defaultValue={work.slug}
-              fullWidth
-              error={errors.slug ? true : false}
-              helperText={errors.slug ? errors.slug.message : ' '}
+              }}
+              control={control}
+              render={({ field }) => (
+                <TextField
+                  label="Slug"
+                  variant="outlined"
+                  fullWidth
+                  error={errors.slug ? true : false}
+                  helperText={errors.slug ? errors.slug.message : ' '}
+                  {...field}
+                />
+              )}
             />
           </Grid>
           <Grid item xs={12} md={10}>
             <ChipInput
-              inputRef={register}
               defaultValue={work.resources}
               onChange={handleResources}
               name="resources"
@@ -195,22 +210,28 @@ export default function FormWork({ work, id }) {
             />
           </Grid>
           <Grid item xs={6} md={2}>
-            <TextField
-              inputRef={register({
+            <Controller
+              name="weight"
+              defaultValue={work.weight}
+              rules={{
                 required: 'Weight is required',
                 pattern: {
                   value: /[0-9]/,
                   message: 'Weight must be a number'
                 }
-              })}
-              defaultValue={work.weight}
-              name="weight"
-              label="Weight"
-              variant="outlined"
-              type="number"
-              fullWidth
-              error={errors.weight ? true : false}
-              helperText={errors.weight ? errors.weight.message : ' '}
+              }}
+              control={control}
+              render={({ field }) => (
+                <TextField
+                  label="Weight"
+                  variant="outlined"
+                  type="number"
+                  fullWidth
+                  error={errors.weight ? true : false}
+                  helperText={errors.weight ? errors.weight.message : ' '}
+                  {...field}
+                />
+              )}
             />
           </Grid>
         </Grid>
@@ -239,35 +260,40 @@ export default function FormWork({ work, id }) {
           </div>
         </Grid>
         <Grid item xs={12} md={6}>
-          <TextField
-            inputRef={register}
-            defaultValue={work.url}
+          <Controller
             name="url"
-            label="Url"
-            variant="outlined"
-            fullWidth
+            defaultValue={work.url}
+            control={control}
+            render={({ field }) => (
+              <TextField label="Url" variant="outlined" fullWidth {...field} />
+            )}
           />
         </Grid>
         <Grid item xs={12} md={6}>
-          <TextField
-            inputRef={register}
-            defaultValue={work.git}
+          <Controller
             name="git"
-            label="Git"
-            variant="outlined"
-            fullWidth
+            defaultValue={work.git}
+            control={control}
+            render={({ field }) => (
+              <TextField label="Git" variant="outlined" fullWidth {...field} />
+            )}
           />
         </Grid>
         <Grid item xs={12}>
-          <TextField
-            inputRef={register}
+          <Controller
             name="description"
-            label="Description"
-            variant="outlined"
             defaultValue={work.description}
-            rows={3}
-            multiline
-            fullWidth
+            control={control}
+            render={({ field }) => (
+              <TextField
+                label="Description"
+                variant="outlined"
+                rows={3}
+                fullWidth
+                multiline
+                {...field}
+              />
+            )}
           />
         </Grid>
         {images &&

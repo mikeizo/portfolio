@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { useForm, Controller } from 'react-hook-form'
 import axios from 'axios'
 import Grid from '@material-ui/core/Grid'
 import TextField from '@material-ui/core/TextField'
@@ -32,7 +32,11 @@ export default function AdminSettings({ settings }) {
   const [submitting, setSubmitting] = useState(false)
   const [alert, setAlert] = useState(false)
   const [alertData, setAlertData] = useState({})
-  const { register, handleSubmit, errors } = useForm()
+  const {
+    handleSubmit,
+    control,
+    formState: { errors }
+  } = useForm()
 
   const onSubmit = async (data) => {
     setSubmitting(true)
@@ -69,28 +73,38 @@ export default function AdminSettings({ settings }) {
       <form onSubmit={handleSubmit(onSubmit)}>
         <Grid container spacing={2}>
           <Grid item xs={12} md={6}>
-            <TextField
-              inputRef={register}
+            <Controller
               name="email"
-              label="Email Address"
-              type="email"
-              variant="outlined"
               defaultValue={settings.email}
-              fullWidth
-              error={errors.email ? true : false}
-              helperText={errors.email ? errors.email.message : ' '}
+              control={control}
+              render={({ field }) => (
+                <TextField
+                  label="Email Address"
+                  type="email"
+                  variant="outlined"
+                  fullWidth
+                  error={errors.email ? true : false}
+                  helperText={errors.email ? errors.email.message : ' '}
+                  {...field}
+                />
+              )}
             />
           </Grid>
           <Grid item xs={12}>
-            <TextField
-              inputRef={register}
+            <Controller
               name="about"
-              label="About Statement"
-              variant="outlined"
               defaultValue={settings.about}
-              rows={4}
-              multiline
-              fullWidth
+              control={control}
+              render={({ field }) => (
+                <TextField
+                  label="About Statement"
+                  variant="outlined"
+                  rows={4}
+                  multiline
+                  fullWidth
+                  {...field}
+                />
+              )}
             />
           </Grid>
         </Grid>

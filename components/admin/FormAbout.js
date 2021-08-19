@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { useForm, Controller } from 'react-hook-form'
 import { useRouter } from 'next/router'
 import axios from 'axios'
 import Grid from '@material-ui/core/Grid'
@@ -12,7 +12,11 @@ export default function FormAbout({ about, id }) {
   const [submitting, setSubmitting] = useState(false)
   const [alert, setAlert] = useState(false)
   const [alertData, setAlertData] = useState({})
-  const { register, handleSubmit, errors } = useForm()
+  const {
+    handleSubmit,
+    control,
+    formState: { errors }
+  } = useForm()
 
   const closeAlert = () => {
     setAlert(false)
@@ -49,43 +53,58 @@ export default function FormAbout({ about, id }) {
       <Alerts isOpen={alert} data={alertData} closeAlert={closeAlert} />
       <Grid container spacing={4}>
         <Grid item sm={6}>
-          <TextField
-            inputRef={register({
+          <Controller
+            name="year_from"
+            defaultValue={about.year_from}
+            control={control}
+            rules={{
               required: 'Year From is required',
               pattern: {
                 value: /^\d{4}$/,
                 message: 'Year must be in format YYYY'
               }
-            })}
-            name="year_from"
-            label="Year From"
-            variant="outlined"
-            defaultValue={about.year_from}
-            fullWidth
-            error={errors.year_from ? true : false}
-            helperText={errors.year_from ? errors.year_from.message : ' '}
+            }}
+            render={({ field }) => (
+              <TextField
+                label="Year From"
+                variant="outlined"
+                fullWidth
+                error={errors.year_from ? true : false}
+                helperText={errors.year_from ? errors.year_from.message : ' '}
+                {...field}
+              />
+            )}
           />
         </Grid>
         <Grid item sm={6}>
-          <TextField
-            inputRef={register({
+          <Controller
+            name="year_to"
+            defaultValue={about.year_to}
+            control={control}
+            rules={{
               pattern: {
                 value: /^\d{4}$/,
                 message: 'Year must be in format YYYY'
               }
-            })}
-            name="year_to"
-            label="Year To"
-            variant="outlined"
-            defaultValue={about.year_to}
-            fullWidth
-            error={errors.year_to ? true : false}
-            helperText={errors.year_to ? errors.year_to.message : ' '}
+            }}
+            render={({ field }) => (
+              <TextField
+                label="Year To"
+                variant="outlined"
+                fullWidth
+                error={errors.year_to ? true : false}
+                helperText={errors.year_to ? errors.year_to.message : ' '}
+                {...field}
+              />
+            )}
           />
         </Grid>
         <Grid item sm={12}>
-          <TextField
-            inputRef={register({
+          <Controller
+            name="description"
+            defaultValue={about.description}
+            control={control}
+            rules={{
               required: 'Description is required',
               minLength: {
                 value: 10,
@@ -95,16 +114,21 @@ export default function FormAbout({ about, id }) {
                 value: 400,
                 message: 'Name must be less than 400 characters'
               }
-            })}
-            name="description"
-            label="Description"
-            variant="outlined"
-            defaultValue={about.description}
-            rows={3}
-            multiline
-            fullWidth
-            error={errors.description ? true : false}
-            helperText={errors.description ? errors.description.message : ' '}
+            }}
+            render={({ field }) => (
+              <TextField
+                label="Description"
+                variant="outlined"
+                rows={3}
+                multiline
+                fullWidth
+                error={errors.description ? true : false}
+                helperText={
+                  errors.description ? errors.description.message : ' '
+                }
+                {...field}
+              />
+            )}
           />
         </Grid>
       </Grid>
