@@ -6,6 +6,7 @@ import ChipInput from 'material-ui-chip-input'
 import Button from '@material-ui/core/Button'
 import Card from '@material-ui/core/Card'
 import CardMedia from '@material-ui/core/CardMedia'
+import CircularProgress from '@material-ui/core/CircularProgress'
 import PhotoCamera from '@material-ui/icons/PhotoCamera'
 import HighlightOffIcon from '@material-ui/icons/HighlightOff'
 import IconButton from '@material-ui/core/IconButton'
@@ -51,9 +52,10 @@ export default function FormWork({ work, id }) {
   const classes = useStyles()
   const router = useRouter()
   const [submitting, setSubmitting] = useState(false)
+  const [uploading, setUploading] = useState(false)
   const [resources, setResources] = useState(work.resources)
   const [logo, setLogo] = useState(work.logo)
-  const [images, setImages] = useState(work.images)
+  const [images, setImages] = useState(work.images ? work.images : [])
   const [alert, setAlert] = useState(false)
   const [alertData, setAlertData] = useState({})
   const {
@@ -97,39 +99,41 @@ export default function FormWork({ work, id }) {
   }
 
   const uploadFile = async (path, data) => {
-    const file = data.target.files[0]
-    const fileData = {
-      filename: encodeURIComponent(file.name),
-      path: path
-    }
-
-    // Get AWS signed presigned url
-    const res = await axios
-      .post('/api/admin/upload', { fileData })
-      .then(function (response) {
-        return response.data
-      })
-
-    const { url, fields } = await res
+    setUploading(true)
+    const photos = data.target.files
     const formData = new FormData()
 
-    Object.entries({ ...fields, file }).forEach(([key, value]) => {
-      formData.append(key, value)
-    })
+    formData.append(`path`, path)
 
-    // Post image to AWS
-    await axios.post(url, formData).then(function (response) {
-      if (path == 'logos') {
-        setLogo(fileData.filename)
-      } else {
-        if (images) {
-          setImages(images.concat(fileData.filename))
-        } else {
-          setImages([fileData.filename])
-        }
-      }
-      return response.data
-    })
+    for (let i = 0; i < photos.length; i++) {
+      formData.append(`photos`, photos[i])
+    }
+
+    await axios
+      .post('/api/admin/upload', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+      })
+      .then(function (response) {
+        response.data.forEach((element) => {
+          if (path == 'logos/') {
+            setLogo(element.originalname)
+          } else {
+            setImages((images) => [...images, element.originalname])
+          }
+        })
+
+        return response.data
+      })
+      .catch(function (error) {
+        setAlert(true)
+        setAlertData({
+          severity: 'error',
+          message: `Error: ${error}`
+        })
+      })
+      .finally(function () {
+        setUploading(false)
+      })
   }
 
   const deleteFile = (id) => {
@@ -250,7 +254,7 @@ export default function FormWork({ work, id }) {
               className={classes.input}
               id="icon-button-file"
               type="file"
-              onChange={(e) => uploadFile('logos', e)}
+              onChange={(e) => uploadFile('logos/', e)}
             />
             <label htmlFor="icon-button-file">
               <Button variant="contained" color="primary" component="span">
@@ -262,7 +266,7 @@ export default function FormWork({ work, id }) {
         <Grid item xs={12} md={6}>
           <Controller
             name="url"
-            defaultValue={work.url}
+            defaultValue={work.url || ''}
             control={control}
             render={({ field }) => (
               <TextField label="Url" variant="outlined" fullWidth {...field} />
@@ -272,7 +276,7 @@ export default function FormWork({ work, id }) {
         <Grid item xs={12} md={6}>
           <Controller
             name="git"
-            defaultValue={work.git}
+            defaultValue={work.git || ''}
             control={control}
             render={({ field }) => (
               <TextField label="Git" variant="outlined" fullWidth {...field} />
@@ -282,7 +286,7 @@ export default function FormWork({ work, id }) {
         <Grid item xs={12}>
           <Controller
             name="description"
-            defaultValue={work.description}
+            defaultValue={work.description || ''}
             control={control}
             render={({ field }) => (
               <TextField
@@ -321,11 +325,17 @@ export default function FormWork({ work, id }) {
             id="images-files"
             className={classes.input}
             type="file"
+            multiple
             onChange={(e) => uploadFile('', e)}
           />
           <label htmlFor="images-files">
             <Button variant="contained" color="primary" component="span">
-              <PhotoCamera className={classes.photoIcon} /> Upload
+              {uploading ? (
+                <CircularProgress color="inherit" size={20} />
+              ) : (
+                <PhotoCamera className={classes.photoIcon} />
+              )}
+              Upload
             </Button>
           </label>
         </Grid>
