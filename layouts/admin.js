@@ -193,7 +193,11 @@ export default function Admin({ children }) {
         >
           <div className={classes.toolbarTop}>
             <Link href="/">
-              <img className={classes.toolbarLogo} src="/img/mtropea-logo.png" width="150" />
+              <img
+                className={classes.toolbarLogo}
+                src="/img/mtropea-logo.png"
+                width="150"
+              />
             </Link>
             <IconButton onClick={handleDrawer}>
               <ChevronLeftIcon />
