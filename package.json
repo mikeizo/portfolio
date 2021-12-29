@@ -14,7 +14,7 @@
     "@material-ui/lab": "^4.0.0-alpha.58",
     "@sendgrid/mail": "^7.4.2",
     "aws-sdk": "^2.872.0",
-    "axios": "^0.21.1",
+    "axios": "^0.24.0",
     "bcrypt": "^5.0.0",
     "clsx": "^1.1.1",
     "cookie": "^0.4.1",
@@ -36,7 +36,7 @@
     "react-reveal": "^1.2.2",
     "react-text-mask": "^5.4.3",
     "sass": "^1.32.12",
-    "swiper": "^6.8.4"
+    "swiper": "^7.4.1"
   },
   "devDependencies": {
     "eslint": "^7.25.0",
