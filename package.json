@@ -1,48 +1,23 @@
 {
-  "name": "frontend",
+  "name": "portfolio",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint ./ --ext .js,.jsx"
+    "lint": "next lint"
   },
   "dependencies": {
-    "@material-ui/core": "^4.11.4",
-    "@material-ui/icons": "^4.11.2",
-    "@material-ui/lab": "^4.0.0-alpha.58",
-    "@sendgrid/mail": "^7.4.2",
-    "aws-sdk": "^2.872.0",
-    "axios": "^0.24.0",
-    "bcrypt": "^5.0.0",
-    "clsx": "^1.1.1",
-    "cookie": "^0.4.1",
-    "devicon": "^2.11.0",
-    "gsap": "^3.6.1",
-    "jsonwebtoken": "^8.5.1",
-    "latest": "^0.2.0",
-    "material-ui-chip-input": "^2.0.0-beta.2",
-    "mongodb": "^4.1.0",
-    "multer": "^1.4.3",
-    "multer-s3": "^2.9.0",
-    "next": "^12.0.8",
-    "next-connect": "^0.11.0",
-    "prop-types": "^15.7.2",
-    "react": "^17.0.2",
-    "react-circular-progressbar": "^2.0.4",
-    "react-dom": "^17.0.2",
-    "react-hook-form": "^7.12.2",
-    "react-reveal": "^1.2.2",
-    "react-text-mask": "^5.4.3",
-    "sass": "^1.32.12",
-    "swiper": "^7.4.1"
-  },
-  "devDependencies": {
-    "eslint": "^8.7.0",
-    "eslint-config-prettier": "^8.3.0",
-    "eslint-plugin-prettier": "^4.0.0",
-    "eslint-plugin-react": "^7.23.2",
-    "prettier": "^2.2.1"
+    "@next/font": "13.1.6",
+    "@types/node": "18.11.18",
+    "@types/react": "18.0.27",
+    "@types/react-dom": "18.0.10",
+    "eslint": "8.32.0",
+    "eslint-config-next": "13.1.6",
+    "next": "13.1.6",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "typescript": "4.9.4"
   }
 }
