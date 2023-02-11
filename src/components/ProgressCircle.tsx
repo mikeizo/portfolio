@@ -6,7 +6,7 @@ export default function ProgressCircle(props) {
     const dashRatio = percent * 0.01 * 0.75
     const viewboxHeight = 100
     const strokeWidth = 8
-    const pathRadius = (viewboxHeight / 2) - strokeWidth / 2
+    const pathRadius = viewboxHeight / 2 - strokeWidth / 2
     const diameter = Math.PI * 2 * pathRadius
     const gapLength = (1 - dashRatio) * diameter
 
