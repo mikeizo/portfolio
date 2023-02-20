@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
 import Head from 'next/head'
-import Image from 'next/image'
 import Box from '@mui/material/Box'
 import Dialog from '@mui/material/Dialog'
 import Grid from '@mui/material/Grid'
@@ -8,6 +7,7 @@ import { gsap } from 'gsap/dist/gsap'
 import { ScrollTrigger } from 'gsap/dist/ScrollTrigger'
 import Layout from '@/components/layouts/default'
 import PageTitle from '@/components/PageTitle'
+import { AboutProps, Items } from '@/types'
 import { connectToDatabase } from '../util/mongodb'
 
 export async function getStaticProps() {
@@ -28,11 +28,52 @@ export async function getStaticProps() {
   }
 }
 
-export default function About({ settings, about }) {
+export default function About({ settings, about }: AboutProps) {
   const [open, setOpen] = useState(false)
   const [portfolio, setPortfolio] = useState('')
+  let loaded = false
 
-  function openDialog(value) {
+  useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger)
+
+    if (!loaded) {
+      loaded = true
+
+      gsap.utils.toArray('.timeline-year').forEach((year: any) => {
+        gsap.from(year, {
+          scrollTrigger: {
+            trigger: year,
+            start: 'top 70%',
+            end: 'bottom 80%',
+            scrub: 1
+            //markers: true
+          },
+          x: -100,
+          opacity: 0,
+          ease: 'none',
+          duration: 3
+        })
+      })
+
+      gsap.utils.toArray('.timeline-description').forEach((year: any) => {
+        gsap.from(year, {
+          scrollTrigger: {
+            trigger: year,
+            start: 'top 70%',
+            end: 'bottom 80%',
+            scrub: 1
+            //markers: true
+          },
+          x: 100,
+          opacity: 0,
+          ease: 'none',
+          duration: 3
+        })
+      })
+    }
+  }, [])
+
+  function openDialog(value: string) {
     setPortfolio(value)
     setOpen(true)
   }
@@ -43,111 +84,70 @@ export default function About({ settings, about }) {
   function Modal() {
     return (
       <Dialog open={open} onClose={closeDialog} maxWidth="lg">
-        <Image
+        <img
           src={`/img/old-sites/${portfolio}`}
           alt="Portfolio"
           className="img-fluid"
-          fill
         />
       </Dialog>
     )
   }
 
-  function TimelineItems(about) {
-    let loaded = false
-
-    useEffect(() => {
-      gsap.registerPlugin(ScrollTrigger)
-
-      if (!loaded) {
-        loaded = true
-
-        gsap.utils.toArray('.timeline-year').forEach((year) => {
-          gsap.from(year, {
-            scrollTrigger: {
-              trigger: year,
-              start: 'top 70%',
-              end: 'bottom 80%',
-              scrub: 1
-              //markers: true
-            },
-            x: -100,
-            opacity: 0,
-            ease: 'none',
-            duration: 3
-          })
-        })
-
-        gsap.utils.toArray('.timeline-description').forEach((year) => {
-          gsap.from(year, {
-            scrollTrigger: {
-              trigger: year,
-              start: 'top 70%',
-              end: 'bottom 80%',
-              scrub: 1
-              //markers: true
-            },
-            x: 100,
-            opacity: 0,
-            ease: 'none',
-            duration: 3
-          })
-        })
-      }
-    }, [])
-
-    const timelineItems = about.items.map((item) => {
-      return (
-        <Grid
-          container
-          key={item._id}
-          className="timeline-item"
-          justifyContent="center"
-        >
-          <Grid item sm={12} md={2}>
-            <Box
-              className="timeline-year"
-              display="flex"
-              flexWrap="wrap"
-              flexDirection="column"
-              justifyContent="center"
-              alignItems="center"
-            >
-              {item.year_to ? (
-                <>
-                  <Box>{item.year_from}</Box>
-                  <Box>
-                    <span>to</span>
-                  </Box>
-                  <Box>{item.year_to}</Box>
-                </>
-              ) : (
-                <Box>{item.year_from}</Box>
-              )}
-            </Box>
-          </Grid>
-          <Grid item sm={12} md={1}></Grid>
-          <Grid item sm={12} md={8}>
-            <Box
-              className="timeline-description"
-              display="flex"
-              alignItems="center"
-            >
-              <Box>
-                {item.description}
-                {item.image && (
+  function TimelineItems({ items }: Items) {
+    const timelineItems = items.map(
+      ({ _id, year_from, year_to, description, image }) => {
+        return (
+          <Grid
+            container
+            key={_id}
+            className="timeline-item"
+            justifyContent="center"
+          >
+            <Grid item sm={12} md={2}>
+              <Box
+                className="timeline-year"
+                display="flex"
+                flexWrap="wrap"
+                flexDirection="column"
+                justifyContent="center"
+                alignItems="center"
+              >
+                {year_to ? (
                   <>
-                    <span>&nbsp;-&nbsp;</span>
-                    <a onClick={() => openDialog(item.image)}>View</a>
+                    <Box>{year_from}</Box>
+                    <Box>
+                      <span>to</span>
+                    </Box>
+                    <Box>{year_to}</Box>
                   </>
+                ) : (
+                  <Box>{year_from}</Box>
                 )}
               </Box>
-            </Box>
+            </Grid>
+            <Grid item sm={12} md={1}></Grid>
+            <Grid item sm={12} md={8}>
+              <Box
+                className="timeline-description"
+                display="flex"
+                alignItems="center"
+              >
+                <Box>
+                  {description}
+                  {image && (
+                    <>
+                      <span>&nbsp;-&nbsp;</span>
+                      <a onClick={() => openDialog(image)}>View</a>
+                    </>
+                  )}
+                </Box>
+              </Box>
+            </Grid>
           </Grid>
-        </Grid>
-      )
-    })
-    return timelineItems
+        )
+      }
+    )
+    return <>{timelineItems}</>
   }
 
   return (

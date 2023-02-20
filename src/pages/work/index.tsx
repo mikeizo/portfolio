@@ -4,25 +4,13 @@ import Grid from '@mui/material/Grid'
 import Box from '@mui/material/Box'
 import Layout from '@/components/layouts/default'
 import PageTitle from '@/components/PageTitle'
+import { WorkProps, WorkItems, Items } from '@/types'
 import { connectToDatabase } from '@/util/mongodb'
 
 export async function getStaticProps() {
   const { db } = await connectToDatabase()
 
-  type Work = {
-    name: string
-    description: string
-    resources: string[]
-    url: string
-    logo: string
-    images: string[]
-    slug: string
-    weight: number
-    git: string
-    created: string
-  }
-
-  const work: Work = await db
+  const work = await db
     .collection('work')
     .find({})
     .sort({ weight: 1 })
@@ -37,30 +25,30 @@ export async function getStaticProps() {
   }
 }
 
-function WorkItems(work) {
-  const workItems = work.items.map((item) => {
+function WorkItems({ items }: Items) {
+  const workItems = items.map(({ _id, slug, name, logo }: WorkItems) => {
     return (
-      <Grid item key={item._id} p={5} xs={12} sm={6} md={4}>
-        <Link href={`work/[slug]`} as={`work/${item.slug}`}>
+      <Grid item key={_id} p={5} xs={12} sm={6} md={4}>
+        <Link href={`work/[slug]`} as={`work/${slug}`}>
           <Box className="work-item">
             <img
               className="img-fluid"
-              src={`${process.env.awsS3Logo}${item.logo}`}
-              alt={item.name}
+              src={`${process.env.awsS3Logo}${logo}`}
+              alt={name}
             />
           </Box>
           <Box mt={3}>
-            <p>{item.name}</p>
+            <p>{name}</p>
           </Box>
         </Link>
       </Grid>
     )
   })
 
-  return workItems
+  return <>{workItems}</>
 }
 
-export default function Work({ work }) {
+export default function Work({ work }: WorkProps) {
   return (
     <Layout>
       <Head>

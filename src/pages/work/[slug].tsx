@@ -1,3 +1,4 @@
+import { GetServerSideProps } from 'next'
 import Head from 'next/head'
 import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
@@ -5,6 +6,7 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 import SwiperCore, { Navigation, Pagination, Autoplay } from 'swiper'
 import Layout from '@/components/layouts/default'
 import PageTitle from '@/components/PageTitle'
+import { WorkItem } from '@/types'
 import { connectToDatabase } from '@/util/mongodb'
 
 import 'swiper/css'
@@ -13,10 +15,12 @@ import 'swiper/css/navigation'
 
 SwiperCore.use([Navigation, Pagination, Autoplay])
 
-export async function getServerSideProps({ query, res }) {
-  const { slug } = query
+export const getServerSideProps: GetServerSideProps = async ({
+  query,
+  res
+}) => {
   const { db } = await connectToDatabase()
-  const work = await db.collection('work').findOne({ slug: slug })
+  const work = await db.collection('work').findOne({ slug: query.slug })
 
   // Page not found
   if (!work) {
@@ -31,14 +35,14 @@ export async function getServerSideProps({ query, res }) {
   }
 }
 
-function formatURL(url) {
+function formatURL(url: string) {
   if (url) {
     const result = url.replace(/(^\w+:|^)\/\//, '')
     return result
   }
 }
 
-export default function Work({ work }) {
+export default function Work({ work }: WorkItem) {
   return (
     <Layout>
       <Head>

@@ -1,5 +1,12 @@
-export default function ProgressCircle(props) {
-  const { percent, name } = props.data
+type Props = {
+  data: {
+    percent: number
+    name: string
+  }
+}
+
+export default function ProgressCircle({ data }: Props) {
+  const { percent, name } = data
   const dashStyle = getDashStyle()
 
   function getDashStyle() {

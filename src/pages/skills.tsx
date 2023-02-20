@@ -5,6 +5,7 @@ import 'devicon'
 import Layout from '@/components/layouts/default'
 import PageTitle from '@/components/PageTitle'
 import ProgressCircle from '@/components/ProgressCircle'
+import { SkillsProps, Items, Experience } from '@/types'
 import { connectToDatabase } from '../util/mongodb'
 
 export async function getStaticProps() {
@@ -26,8 +27,8 @@ export async function getStaticProps() {
   }
 }
 
-function SkillItems(skills) {
-  const skillItems = skills.items.map((item, index) => {
+function SkillItems({ items }: Items) {
+  const skillItems = items.map((item, index) => {
     return (
       <Grid key={index} item xs={6} sm={6} md={3}>
         <Box textAlign="center" className="skill-item">
@@ -37,23 +38,23 @@ function SkillItems(skills) {
     )
   })
 
-  return skillItems
+  return <>{skillItems}</>
 }
 
-function ExperienceItems(experience) {
-  const experienceItems = experience.items.map((item, index) => {
+function ExperienceItems({ items }: Items) {
+  const experienceItems = items.map(({ icon, name }: Experience, index) => {
     return (
       <Box key={index} className="devicon" m={3}>
-        <i className={item.icon}></i>
-        <span>{item.name}</span>
+        <i className={icon}></i>
+        <span>{name}</span>
       </Box>
     )
   })
 
-  return experienceItems
+  return <>{experienceItems}</>
 }
 
-export default function Skills({ skills, experience }) {
+export default function Skills({ skills, experience }: SkillsProps) {
   return (
     <Layout>
       <Head>
