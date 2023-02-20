@@ -10,7 +10,6 @@ import IconButton from '@mui/material/IconButton'
 import CloseIcon from '@mui/icons-material/Close'
 import CircularProgress from '@mui/material/CircularProgress'
 import InputLabel from '@mui/material/InputLabel'
-import { MuiTelInput, matchIsValidTel } from 'mui-tel-input'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 
 const theme = createTheme({
@@ -31,7 +30,7 @@ export default function ContactForm({ contactChange, contact }) {
 
   const onSubmit = async (data) => {
     setSubmitting(true)
-    const res = await fetch('/api/mail', {
+    await fetch('/api/mail', {
       body: JSON.stringify({ data }),
       headers: {
         'Content-Type': 'application/json'
@@ -79,6 +78,7 @@ export default function ContactForm({ contactChange, contact }) {
         <DialogContent>
           <ThemeProvider theme={theme}>
             <Box>
+              <InputLabel htmlFor="phone">*Name</InputLabel>
               <Controller
                 name="name"
                 defaultValue=""
@@ -96,15 +96,16 @@ export default function ContactForm({ contactChange, contact }) {
                 }}
                 render={({ field }) => (
                   <TextField
-                    label="*Name"
+                    {...field}
+                    fullWidth
+                    placeholder="Ben Kenobi"
                     color="primary"
                     error={errors.name ? true : false}
                     helperText={errors.name ? errors.name.message : ' '}
-                    fullWidth
-                    {...field}
                   />
                 )}
               />
+              <InputLabel htmlFor="phone">*Email</InputLabel>
               <Controller
                 name="email"
                 defaultValue=""
@@ -118,12 +119,12 @@ export default function ContactForm({ contactChange, contact }) {
                 }}
                 render={({ field }) => (
                   <TextField
-                    label="*Email"
-                    color="primary"
-                    error={errors.email ? true : false}
-                    helperText={errors.email ? errors.email.message : ' '}
-                    fullWidth
                     {...field}
+                    fullWidth
+                    placeholder="ben.kenobi@jedimaste.com"
+                    color="primary"
+                    helperText={errors.email ? errors.email.message : ' '}
+                    error={errors.email ? true : false}
                   />
                 )}
               />
@@ -131,16 +132,25 @@ export default function ContactForm({ contactChange, contact }) {
               <Controller
                 name="phone"
                 control={control}
-                rules={{ validate: matchIsValidTel }}
+                rules={{
+                  pattern: {
+                    value:
+                      /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/i
+                  },
+                  minLength: {
+                    value: 10
+                  },
+                  maxLength: {
+                    value: 14
+                  }
+                }}
                 render={({ field, fieldState }) => (
-                  <MuiTelInput
+                  <TextField
                     {...field}
                     fullWidth
+                    placeholder="914-555-1234"
                     color="primary"
-                    disableDropdown
-                    defaultCountry={'US'}
-                    onlyCountries={['US']}
-                    helperText={fieldState.invalid ? 'Phone is invalid' : ''}
+                    helperText={errors.phone ? 'Phone number is invalid' : ''}
                     error={fieldState.invalid}
                   />
                 )}
