@@ -24,7 +24,6 @@
     "devicon": "^2.15.1",
     "gsap": "^3.11.4",
     "jose": "^4.13.1",
-    "jsonwebtoken": "^9.0.0",
     "mongodb": "^5.0.0",
     "mui-chips-input": "^2.0.0",
     "multer": "^1.4.5-lts.1",
