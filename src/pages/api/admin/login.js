@@ -1,6 +1,6 @@
 import { connectToDatabase } from '@/util/mongodb'
 import { compare } from 'bcrypt'
-import { sign } from 'jsonwebtoken'
+import { SignJWT } from 'jose'
 import cookie from 'cookie'
 
 const handler = async (req, res) => {
@@ -12,17 +12,23 @@ const handler = async (req, res) => {
       .findOne({ email: email.toLowerCase() })
 
     if (user) {
-      compare(pass, user.pass, function (err, result) {
+      compare(pass, user.pass, async function (err, result) {
         // Success
         if (!err && result) {
           // Create jason web token
-          const create = {
+          const data = {
             sub: user._id,
             email: user.email,
             name: user.name,
             role: user.role
           }
-          const jwt = sign(create, process.env.HASH_SECRET, { expiresIn: '1h' })
+          const secret = new TextEncoder().encode(process.env.HASH_SECRET)
+          const alg = 'HS256'
+
+          const jwt = await new SignJWT(data)
+            .setProtectedHeader({ alg })
+            .setExpirationTime('2h')
+            .sign(secret)
 
           // Store jwt cookie
           res.setHeader(

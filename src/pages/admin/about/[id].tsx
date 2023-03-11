@@ -1,19 +1,10 @@
 import Title from '@/components/admin/Title'
 import FormAbout from '@/components/admin/FormAbout'
 import AdminLayout from '@/components/layouts/admin'
-// import { requirePageAuth } from '@/util/token'
 import { connectToDatabase } from '@/util/mongodb'
 import { ObjectId } from 'mongodb'
 
-export async function getServerSideProps({ query, req }) {
-  // Authenticate user
-  // const profile = requirePageAuth(req.cookies.auth)
-  // if (!profile) {
-  //   return {
-  //     redirect: { destination: process.env.adminLogin, permanent: false }
-  //   }
-  // }
-
+export async function getServerSideProps({ query }) {
   const { id } = query
   const { db } = await connectToDatabase()
   const about = await db.collection('about').findOne({ _id: new ObjectId(id) })

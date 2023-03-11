@@ -1,19 +1,21 @@
-import { verify } from 'jsonwebtoken'
+import { jwtVerify } from 'jose'
 
-const authenticated = (handler) => (req, res) => {
-  verify(
-    req.cookies.auth,
-    process.env.HASH_SECRET,
-    async function (err, decoded) {
-      if (decoded.role === 'guest') {
-        res.status(401).end()
-      } else if (!err && decoded) {
-        return await handler(req, res)
-      } else {
-        res.status(401).end()
-      }
+const secret = new TextEncoder().encode(process.env.HASH_SECRET)
+
+const authenticated = (handler) => async (req, res) => {
+  const token = req.cookies.auth ? req.cookies.auth : ''
+
+  try {
+    const { payload } = await jwtVerify(token, secret)
+
+    if (payload.role === 'guest') {
+      res.status(401).end()
+    } else if (payload) {
+      return await handler(req, res)
     }
-  )
+  } catch {
+    res.status(401).end()
+  }
 }
 
 export default authenticated

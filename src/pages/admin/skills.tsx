@@ -8,18 +8,9 @@ import Alerts from '@/components/admin/Alerts'
 import SubmitButton from '@/components/admin/SubmitButton'
 import Title from '@/components/admin/Title'
 import AdminLayout from '@/components/layouts/admin'
-// import { requirePageAuth } from '@/util/token'
 import { connectToDatabase } from '@/util/mongodb'
 
-export async function getServerSideProps({ req }) {
-  // Authenticate user
-  // const profile = requirePageAuth(req.cookies.auth)
-  // if (!profile) {
-  //   return {
-  //     redirect: { destination: process.env.adminLogin, permanent: false }
-  //   }
-  // }
-
+export async function getServerSideProps() {
   const { db } = await connectToDatabase()
   const skills = await db.collection('skills').find({}).toArray()
 

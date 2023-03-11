@@ -31,7 +31,8 @@ export default function SignIn() {
     await axios
       .post('/api/admin/login', { formData })
       .then(function (response) {
-        Router.push('/admin/')
+        console.log('test redirect to admin')
+        Router.push('/admin')
         return response.data
       })
       .catch(function (error) {

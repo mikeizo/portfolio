@@ -1,8 +1,12 @@
-import { verify } from 'jsonwebtoken'
+import { jwtVerify } from 'jose'
 
-export function verifyToken(token) {
+export async function verifyToken(token) {
+  const secret = new TextEncoder().encode(process.env.HASH_SECRET)
+
   try {
-    return verify(token, process.env.HASH_SECRET)
+    const { payload } = await jwtVerify(token.toString(), secret)
+
+    return payload
   } catch (error) {
     return null
   }

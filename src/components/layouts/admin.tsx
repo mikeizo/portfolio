@@ -92,7 +92,7 @@ export default function Admin({ children }) {
 
   async function logout() {
     await axios.get('/api/admin/logout').then(function () {
-      Router.push('/admin/login')
+      Router.push('/login')
     })
   }
 
