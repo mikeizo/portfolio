@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, SyntheticEvent } from 'react'
 import Router from 'next/router'
 import Link from 'next/link'
 import axios from 'axios'
@@ -18,26 +18,24 @@ export default function SignIn() {
     pass: ''
   })
 
-  const handleChange = (data) => {
+  const handleChange = (data: { target: { name: string; value: string } }) => {
     setFormData({
       ...formData,
       [data.target.name]: data.target.value
     })
   }
 
-  const handleSubmit = async (data) => {
+  const handleSubmit = async (data: SyntheticEvent) => {
     data.preventDefault()
     setSubmitting(true)
     await axios
       .post('/api/admin/login', { formData })
       .then(function (response) {
-        console.log('test redirect to admin')
         Router.push('/admin')
         return response.data
       })
       .catch(function (error) {
         setMessage(true)
-        console.log('test error', error)
         return error
       })
       .finally(function () {

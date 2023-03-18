@@ -13,7 +13,12 @@ const ColorButton = styled(Button)<ButtonProps>(() => ({
   }
 }))
 
-export default function Title({ title, addLink = '' }) {
+type TitleProps = {
+  title?: string
+  addLink?: string
+}
+
+export default function Title({ title, addLink = '' }: TitleProps) {
   return (
     <>
       <Box

@@ -2,15 +2,7 @@ import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import CircularProgress from '@mui/material/CircularProgress'
 
-// const useStyles = makeStyles((theme) => ({
-//   buttons: {
-//     marginTop: theme.spacing(4),
-//     display: 'flex',
-//     justifyContent: 'flex-end'
-//   }
-// }))
-
-export default function SubmitButton({ submitting }) {
+export default function SubmitButton({ submitting }: { submitting: boolean }) {
   return (
     <Box
       sx={{

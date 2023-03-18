@@ -1,3 +1,4 @@
+import { ReactNode } from 'react'
 import { useRouter } from 'next/router'
 import Head from 'next/head'
 import Box from '@mui/material/Box'
@@ -5,14 +6,12 @@ import Container from '@mui/material/Container'
 import Header from '@/components/regions/Header'
 import Footer from '@/components/regions/Footer'
 
-export default function Layout({ children }) {
-  const route = useRouter()
+type Props = {
+  children?: ReactNode
+}
 
-  function RegionFooter() {
-    if (route.pathname !== '/') {
-      return <Footer />
-    }
-  }
+export default function Layout({ children }: Props) {
+  const route = useRouter()
 
   return (
     <>
@@ -29,7 +28,7 @@ export default function Layout({ children }) {
         <Container>
           <main>{children}</main>
         </Container>
-        <RegionFooter />
+        {route.pathname !== '/' && <Footer />}
       </Box>
     </>
   )

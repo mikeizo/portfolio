@@ -8,7 +8,7 @@ export default function AdminWorkAdd() {
   return (
     <AdminLayout>
       <Title title="Add Work" />
-      <FormWork work={work} id="" />
+      <FormWork work={work} />
     </AdminLayout>
   )
 }

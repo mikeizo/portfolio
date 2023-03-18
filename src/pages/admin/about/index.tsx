@@ -1,3 +1,4 @@
+import { InferGetServerSidePropsType } from 'next'
 import DataTable from '@/components/admin/DataTable'
 import Title from '@/components/admin/Title'
 import AdminLayout from '@/components/layouts/admin'
@@ -25,7 +26,9 @@ export async function getServerSideProps() {
   }
 }
 
-export default function AdminAbout({ about }) {
+export default function AdminAbout({
+  about
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   return (
     <AdminLayout>
       <Title title="About" addLink="about/add" />

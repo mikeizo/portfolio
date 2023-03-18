@@ -21,7 +21,9 @@ const handler = async (req, res) => {
           updated: date()
         }
       }
-      await db.collection('about').updateOne({ _id: new ObjectId(id) }, updateDoc)
+      await db
+        .collection('about')
+        .updateOne({ _id: new ObjectId(id) }, updateDoc)
 
       res.status(200).send('Success')
     } else {

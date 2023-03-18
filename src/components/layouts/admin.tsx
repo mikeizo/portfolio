@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, ReactNode, MouseEvent } from 'react'
 import Router from 'next/router'
 import axios from 'axios'
 import Box from '@mui/material/Box'
@@ -18,6 +18,10 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
 import MenuIcon from '@mui/icons-material/Menu'
 import { mainListItems } from '@/components/admin/Menu'
 import { styled, createTheme, ThemeProvider } from '@mui/material/styles'
+
+type Props = {
+  children?: ReactNode
+}
 
 const drawerWidth = 240
 
@@ -75,14 +79,14 @@ const Drawer = styled(MuiDrawer, {
   }
 }))
 
-export default function Admin({ children }) {
-  const [open, setOpen] = useState(true)
-  const [anchorEl, setAnchorEl] = useState(null)
+export default function Admin({ children }: Props) {
+  const [open, setOpen] = useState<boolean>(true)
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const toggleDrawer = () => {
     setOpen(!open)
   }
 
-  const handleMenu = (event) => {
+  const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget)
   }
 
@@ -124,7 +128,7 @@ export default function Admin({ children }) {
               aria-label="account of current user"
               aria-controls="menu-appbar"
               aria-haspopup="true"
-              onClick={handleMenu}
+              onClick={handleClick}
               color="inherit"
             >
               <AccountCircle />
@@ -188,7 +192,7 @@ export default function Admin({ children }) {
           }}
         >
           <Toolbar />
-          <Container maxWidth="lg" sx={{ mt: 4, mb:4 }}>
+          <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
             <Grid item xs={12}>
               <Paper
                 sx={{

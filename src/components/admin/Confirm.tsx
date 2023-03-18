@@ -14,11 +14,17 @@ Confirmation.propTypes = {
   confirmFunction: PropTypes.func
 }
 
+type ConfirmProps = {
+  openConfirmation: boolean
+  closeConfirmation(): void
+  confirmFunction(): void
+}
+
 export default function Confirmation({
   openConfirmation,
   closeConfirmation,
   confirmFunction
-}) {
+}: ConfirmProps) {
   return (
     <Dialog
       open={openConfirmation}

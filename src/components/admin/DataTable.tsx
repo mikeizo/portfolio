@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { MouseEvent, ChangeEvent, useState, SyntheticEvent } from 'react'
 import axios from 'axios'
 import PropTypes from 'prop-types'
 import Link from 'next/link'
@@ -14,6 +14,7 @@ import TableRow from '@mui/material/TableRow'
 import TableSortLabel from '@mui/material/TableSortLabel'
 import DeleteIcon from '@mui/icons-material/Delete'
 import EditIcon from '@mui/icons-material/Edit'
+import { AlertProps } from '@/types'
 import Alerts from './Alerts'
 import Confirm from './Confirm'
 
@@ -56,15 +57,34 @@ function stableSort<T>(
   return stabilizedThis.map((el) => el[0])
 }
 
+interface HeadCell {
+  align: 'center' | 'left' | 'right' | 'inherit' | 'justify' | undefined
+  disablePadding: boolean
+  id: any
+  label: string
+  numeric: boolean
+}
+
+interface EnhancedTableProps {
+  numSelected: number
+  onRequestSort: (event: MouseEvent<unknown>, property: any) => void
+  onSelectAllClick: (event: ChangeEvent<HTMLInputElement>) => void
+  order: Order
+  orderBy: string | number | symbol
+  rowCount: number
+  headCells: readonly HeadCell[]
+}
+
 function EnhancedTableHead({
   order,
   orderBy,
   onRequestSort,
   headCells
-}) {
-  const createSortHandler = (property) => (event) => {
-    onRequestSort(event, property)
-  }
+}: EnhancedTableProps) {
+  const createSortHandler =
+    (property: string | number | symbol) => (event: MouseEvent<unknown>) => {
+      onRequestSort(event, property)
+    }
 
   return (
     <>
@@ -122,28 +142,38 @@ EnhancedTableHead.propTypes = {
   rowCount: PropTypes.number.isRequired
 }
 
-export default function EnhancedTable({ data, headCells, pageName }) {
+type TableProps = {
+  data: any[]
+  headCells: any
+  pageName: string
+}
+
+export default function EnhancedTable({
+  data,
+  headCells,
+  pageName
+}: TableProps) {
   const [pageData, setPageData] = useState(data)
-  const [order, setOrder] = useState('asc')
-  const [orderBy, setOrderBy] = useState('')
+  const [order, setOrder] = useState<Order>('asc')
+  const [orderBy, setOrderBy] = useState<keyof any>('')
   const [page, setPage] = useState(0)
   const [rowsPerPage, setRowsPerPage] = useState(5)
   const [openDialog, setOpenDialog] = useState(false)
-  const [deleteId, setDeleteId] = useState(0)
+  const [deleteId, setDeleteId] = useState<number | string>(0)
   const [alert, setAlert] = useState(false)
-  const [alertData, setAlertData] = useState({})
+  const [alertData, setAlertData] = useState<AlertProps>({} as AlertProps)
 
-  const handleRequestSort = (event, property) => {
+  const handleRequestSort = (_event: any, property: any) => {
     const isAsc = orderBy === property && order === 'asc'
     setOrder(isAsc ? 'desc' : 'asc')
     setOrderBy(property)
   }
 
-  const handleChangePage = (event, newPage) => {
+  const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage)
   }
 
-  const handleChangeRowsPerPage = (event) => {
+  const handleChangeRowsPerPage = (event: { target: { value: string } }) => {
     setRowsPerPage(parseInt(event.target.value, 10))
     setPage(0)
   }
@@ -151,7 +181,7 @@ export default function EnhancedTable({ data, headCells, pageName }) {
   const emptyRows =
     rowsPerPage - Math.min(rowsPerPage, data.length - page * rowsPerPage)
 
-  const openConfirmation = (id) => {
+  const openConfirmation = (id: string | number) => {
     setDeleteId(id)
     setOpenDialog(true)
   }
@@ -216,6 +246,10 @@ export default function EnhancedTable({ data, headCells, pageName }) {
             onRequestSort={handleRequestSort}
             rowCount={pageData.length}
             headCells={headCells}
+            numSelected={0}
+            onSelectAllClick={function (): void {
+              throw new Error('Function not implemented.')
+            }}
           />
           <TableBody>
             {stableSort(pageData, getComparator(order, orderBy))
@@ -224,7 +258,7 @@ export default function EnhancedTable({ data, headCells, pageName }) {
                 //const labelId = `enhanced-table-checkbox-${index}`
                 return (
                   <TableRow hover key={row._id}>
-                    {headCells.map((cell, index) => (
+                    {headCells.map((cell: HeadCell, index: number) => (
                       <TableCell
                         component="th"
                         scope="row"

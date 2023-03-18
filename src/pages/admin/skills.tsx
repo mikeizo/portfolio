@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useState, FormEvent } from 'react'
+import { InferGetServerSidePropsType } from 'next'
 import axios from 'axios'
 import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
@@ -8,7 +9,13 @@ import Alerts from '@/components/admin/Alerts'
 import SubmitButton from '@/components/admin/SubmitButton'
 import Title from '@/components/admin/Title'
 import AdminLayout from '@/components/layouts/admin'
+import { AlertProps } from '@/types'
 import { connectToDatabase } from '@/util/mongodb'
+
+type skillProps = {
+  name: string
+  percent: number
+}
 
 export async function getServerSideProps() {
   const { db } = await connectToDatabase()
@@ -21,13 +28,15 @@ export async function getServerSideProps() {
   }
 }
 
-export default function AdminSkills({ skills }) {
+export default function AdminSkills({
+  skills
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const [submitting, setSubmitting] = useState(false)
   const [values, setValues] = useState(skills)
   const [alert, setAlert] = useState(false)
-  const [alertData, setAlertData] = useState({})
+  const [alertData, setAlertData] = useState<AlertProps>({} as AlertProps)
 
-  const onSubmit = async (event) => {
+  const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     setSubmitting(true)
 
@@ -53,8 +62,12 @@ export default function AdminSkills({ skills }) {
       })
   }
 
-  const handleSliderChange = (id, event, newValue) => {
-    let newObject = skills
+  const handleSliderChange = (
+    id: string | number,
+    _event: Event,
+    newValue: number | number[]
+  ) => {
+    const newObject = skills
     newObject[id].percent = newValue
     setValues(newObject)
   }
@@ -69,7 +82,7 @@ export default function AdminSkills({ skills }) {
       <Title title="Skills" />
       <form onSubmit={onSubmit}>
         <Grid container spacing={5}>
-          {values.map((item, index) => (
+          {values.map((item: skillProps, index: number) => (
             <Grid key={index} item xs={12} sm={6}>
               <Box textAlign="center">
                 <Typography gutterBottom>{item.name}</Typography>

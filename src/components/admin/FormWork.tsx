@@ -13,6 +13,7 @@ import Grid from '@mui/material/Grid'
 import TextField from '@mui/material/TextField'
 import { MuiChipsInput, MuiChipsInputChip } from 'mui-chips-input'
 import Alerts from './Alerts'
+import { AlertProps } from '@/types'
 import SubmitButton from './SubmitButton'
 
 const classes = {
@@ -21,20 +22,39 @@ const classes = {
   }
 }
 
-export default function FormWork({ work, id }) {
+type FormProps = {
+  work: FormValues
+  id?: number
+}
+
+type FormValues = {
+  name?: string
+  url?: string
+  slug?: string
+  git?: string
+  weight?: number
+  description?: string
+  resources?: MuiChipsInputChip[]
+  logo?: string
+  images?: []
+}
+
+export default function FormWork({ work, id }: FormProps) {
   const router = useRouter()
   const [submitting, setSubmitting] = useState(false)
   const [uploading, setUploading] = useState(false)
-  const [resources, setValue] = useState<MuiChipsInputChip[]>(work.resources)
+  const [resources, setValue] = useState<MuiChipsInputChip[]>(
+    work.resources as MuiChipsInputChip[]
+  )
   const [logo, setLogo] = useState(work.logo)
-  const [images, setImages] = useState(work.images ? work.images : [])
+  const [images, setImages] = useState<string[]>(work.images ? work.images : [])
   const [alert, setAlert] = useState(false)
-  const [alertData, setAlertData] = useState({})
+  const [alertData, setAlertData] = useState<AlertProps>({} as AlertProps)
   const {
     handleSubmit,
     control,
     formState: { errors }
-  } = useForm()
+  } = useForm<FormValues>()
 
   const closeAlert = () => {
     setAlert(false)
@@ -44,7 +64,7 @@ export default function FormWork({ work, id }) {
     setValue(newValue)
   }
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (data: any) => {
     await axios
       .post(`/api/admin/work/${id}`, { ...data, resources, logo, images })
       .then(function (response) {
@@ -70,7 +90,7 @@ export default function FormWork({ work, id }) {
       })
   }
 
-  const uploadFile = async (path, data) => {
+  const uploadFile = async (path: string, data: any) => {
     setUploading(true)
     const photos = data.target.files
     const formData = new FormData()
@@ -86,7 +106,7 @@ export default function FormWork({ work, id }) {
         headers: { 'Content-Type': 'multipart/form-data' }
       })
       .then(function (response) {
-        response.data.forEach((element) => {
+        response.data.forEach((element: { originalname: string }) => {
           if (path == 'logos/') {
             setLogo(element.originalname)
           } else {
@@ -108,7 +128,7 @@ export default function FormWork({ work, id }) {
       })
   }
 
-  const deleteFile = (id) => {
+  const deleteFile = (id: number) => {
     const newList = [...images]
     newList.splice(id, 1)
     setImages(newList)

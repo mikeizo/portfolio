@@ -6,23 +6,35 @@ import Grid from '@mui/material/Grid'
 import TextField from '@mui/material/TextField'
 import Alerts from './Alerts'
 import SubmitButton from './SubmitButton'
+import { AlertProps } from '@/types'
 
-export default function FormAbout({ about, id }) {
+type FormProps = {
+  about: FormValues
+  id?: number
+}
+
+type FormValues = {
+  year_from?: string
+  year_to?: string
+  description?: string
+}
+
+export default function FormAbout({ about, id }: FormProps) {
   const router = useRouter()
   const [submitting, setSubmitting] = useState(false)
   const [alert, setAlert] = useState(false)
-  const [alertData, setAlertData] = useState({})
+  const [alertData, setAlertData] = useState<AlertProps>({} as AlertProps)
   const {
     handleSubmit,
     control,
     formState: { errors }
-  } = useForm()
+  } = useForm<FormValues>()
 
   const closeAlert = () => {
     setAlert(false)
   }
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (data: any) => {
     await axios
       .post(`/api/admin/about/${id}`, { data })
       .then(function (response) {

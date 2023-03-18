@@ -8,7 +8,7 @@ export default function AdminAboutAdd() {
   return (
     <AdminLayout>
       <Title title="Add About" />
-      <FormAbout about={about} id="" />
+      <FormAbout about={about} />
     </AdminLayout>
   )
 }

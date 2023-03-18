@@ -1,3 +1,5 @@
+import { AlertColor } from '@mui/material/Alert'
+
 export type Items = {
   items: []
 }
@@ -55,4 +57,15 @@ export type WorkItems = {
   date: string
   git?: string
   url?: string
+}
+
+export type QueryParam = {
+  query: {
+    id: number
+  }
+}
+
+export type AlertProps = {
+  severity: AlertColor
+  message: string
 }

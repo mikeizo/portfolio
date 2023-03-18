@@ -1,7 +1,20 @@
 import Snackbar from '@mui/material/Snackbar'
-import Alert from '@mui/material/Alert'
+import Alert, { AlertColor } from '@mui/material/Alert'
 
-export default function SimpleSnackbar({ isOpen, data, closeAlert }) {
+type AlertProps = {
+  isOpen: boolean
+  data: {
+    severity: AlertColor
+    message: string
+  }
+  closeAlert(): void
+}
+
+export default function SimpleSnackbar({
+  isOpen,
+  data,
+  closeAlert
+}: AlertProps) {
   return (
     <div>
       <Snackbar

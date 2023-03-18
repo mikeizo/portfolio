@@ -1,13 +1,16 @@
+import { InferGetServerSidePropsType } from 'next'
 import Title from '@/components/admin/Title'
 import FormAbout from '@/components/admin/FormAbout'
 import AdminLayout from '@/components/layouts/admin'
+import { QueryParam } from '@/types'
 import { connectToDatabase } from '@/util/mongodb'
 import { ObjectId } from 'mongodb'
 
-export async function getServerSideProps({ query }) {
-  const { id } = query
+export async function getServerSideProps({ query }: QueryParam) {
   const { db } = await connectToDatabase()
-  const about = await db.collection('about').findOne({ _id: new ObjectId(id) })
+  const about = await db
+    .collection('about')
+    .findOne({ _id: new ObjectId(query.id) })
 
   return {
     props: {
@@ -16,7 +19,9 @@ export async function getServerSideProps({ query }) {
   }
 }
 
-export default function AdminAboutId({ about }) {
+export default function AdminAboutId({
+  about
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const title = about.year_to
     ? `${about.year_from} - ${about.year_to}`
     : about.year_from

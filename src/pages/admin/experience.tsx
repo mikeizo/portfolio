@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useState, SyntheticEvent } from 'react'
+import { InferGetServerSidePropsType } from 'next'
 import axios from 'axios'
 import Box from '@mui/material/Box'
 import AddIcon from '@mui/icons-material/Add'
@@ -15,8 +16,14 @@ import AdminLayout from '@/components/layouts/admin'
 import Alerts from '@/components/admin/Alerts'
 import SubmitButton from '@/components/admin/SubmitButton'
 import Title from '@/components/admin/Title'
+import { AlertProps } from '@/types'
 import { connectToDatabase } from '@/util/mongodb'
 import 'devicon'
+
+type ExperienceProps = {
+  name: string
+  icon: string
+}
 
 export async function getServerSideProps() {
   const { db } = await connectToDatabase()
@@ -29,17 +36,22 @@ export async function getServerSideProps() {
   }
 }
 
-export default function AdminExperience({ experience }) {
+export default function AdminExperience({
+  experience
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const [submitting, setSubmitting] = useState(false)
-  const [experiences, setExperiences] = useState(experience)
-  const [remove, setRemove] = useState([])
-  const [add, setAdd] = useState([])
-  const [input, setInput] = useState({})
+  const [experiences, setExperiences] = useState<ExperienceProps[]>(experience)
+  const [remove, setRemove] = useState<ExperienceProps[]>([])
+  const [add, setAdd] = useState<ExperienceProps[]>([])
+  const [input, setInput] = useState<ExperienceProps>({
+    name: '',
+    icon: ''
+  })
   const [error, setError] = useState(false)
   const [alert, setAlert] = useState(false)
-  const [alertData, setAlertData] = useState({})
+  const [alertData, setAlertData] = useState<AlertProps>({} as AlertProps)
 
-  const onSubmit = async (event) => {
+  const onSubmit = async (event: SyntheticEvent) => {
     event.preventDefault()
 
     if (add.length) {
@@ -71,7 +83,7 @@ export default function AdminExperience({ experience }) {
     }
   }
 
-  const handleChange = (event) => {
+  const handleChange = (event: { target: { name: string; value: string } }) => {
     const name = event.target.name
     const value = event.target.value
 
@@ -84,23 +96,25 @@ export default function AdminExperience({ experience }) {
   const addExperience = () => {
     if (input.name && input.icon) {
       setAdd(add.concat(input))
-      document.getElementById('experience-form').reset()
-      setInput({})
+      setInput({
+        name: '',
+        icon: ''
+      })
       setError(false)
     } else {
       setError(true)
     }
   }
 
-  const removeAddition = (id) => {
-    let newExperiences = [...add]
+  const removeAddition = (id: number) => {
+    const newExperiences = [...add]
     newExperiences.splice(id, 1)
     setAdd(newExperiences)
   }
 
-  const deleteExperience = (id) => {
-    let newExperiences = [...experiences]
-    let newRemove = remove
+  const deleteExperience = (id: number) => {
+    const newExperiences = [...experiences]
+    const newRemove = remove
 
     newExperiences.splice(id, 1)
     newRemove.push(experiences[id])
@@ -119,7 +133,7 @@ export default function AdminExperience({ experience }) {
       <Title title="Experience" />
       <form onSubmit={onSubmit} id="experience-form">
         <Grid container spacing={2}>
-          {experiences.map((item, index) => (
+          {experiences.map((item: ExperienceProps, index: number) => (
             <Grid key={index} item xs={6} sm={3} md={2}>
               <Box
                 textAlign="center"
@@ -134,7 +148,7 @@ export default function AdminExperience({ experience }) {
               </Box>
               <Box textAlign="center">
                 <IconButton
-                  alt="Delete"
+                  aria-label="Delete"
                   color="error"
                   onClick={() => deleteExperience(index)}
                 >
@@ -151,6 +165,7 @@ export default function AdminExperience({ experience }) {
           <Grid item xs={12} sm={5}>
             <TextField
               name="name"
+              value={input.name}
               label="Name"
               variant="outlined"
               fullWidth
@@ -162,6 +177,7 @@ export default function AdminExperience({ experience }) {
           <Grid item xs={12} sm={5}>
             <TextField
               name="icon"
+              value={input.icon}
               label="Icon Class"
               variant="outlined"
               fullWidth
@@ -178,10 +194,10 @@ export default function AdminExperience({ experience }) {
         </Grid>
         <Grid item xs={12}>
           <List>
-            {add.map((item, index) => (
+            {add.map((item: ExperienceProps, index: number) => (
               <ListItem key={index}>
                 <IconButton
-                  alt="Remove"
+                  aria-label="Remove"
                   color="error"
                   onClick={() => removeAddition(index)}
                 >
