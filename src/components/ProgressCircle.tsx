@@ -1,3 +1,5 @@
+import { useState, useEffect } from 'react'
+
 type Props = {
   data: {
     percent: number
@@ -7,21 +9,21 @@ type Props = {
 
 export default function ProgressCircle({ data }: Props) {
   const { percent, name } = data
-  const dashStyle = getDashStyle()
+  const [dashStyle, setDashStyle] = useState({
+    strokeDashoffset: `290px`
+  })
 
-  function getDashStyle() {
+  useEffect(() => {
     const dashRatio = percent * 0.01 * 0.75
     const viewboxHeight = 100
     const strokeWidth = 8
     const pathRadius = viewboxHeight / 2 - strokeWidth / 2
     const diameter = Math.PI * 2 * pathRadius
     const gapLength = (1 - dashRatio) * diameter
-
-    return {
-      // strokeDasharray: `${diameter}px ${diameter}px`,
+    setDashStyle({
       strokeDashoffset: `${gapLength}px`
-    }
-  }
+    })
+  }, [percent])
 
   return (
     <>

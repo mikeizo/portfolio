@@ -181,9 +181,6 @@
     }
   }
 
-  /**
-  * Skills
-  */
   .CircularProgressbar-trail {
     stroke: $gray;
     transform: rotate(0.625turn);
@@ -197,10 +194,8 @@
     stroke: $white;
     transform: rotate(0.625turn);
     transform-origin: center center;
-    transition-duration: 0.5s;
     stroke-dasharray: 290px, 290px;
     stroke-linecap: round;
-
   }
   .CircularProgressbar-text {
     fill: $white;
@@ -209,6 +204,6 @@
   }
 
   .CircularProgressbar .CircularProgressbar-path {
-    transition: stroke-dashoffset .5s ease 0s;
+    transition: stroke-dashoffset 1.5s ease 0s;
   }
 }
