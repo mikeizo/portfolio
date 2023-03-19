@@ -44,13 +44,15 @@ export default function Index() {
     <Layout>
       <Astronaut />
       <Box
-        display="flex"
-        flexWrap="wrap"
-        justifyContent="center"
-        alignItems="center"
-        alignContent="center"
         className="home-title"
-        mt={-10}
+        sx={{
+          flexWrap: 'wrap',
+          display: { sm: 'flex', xs: 'block' },
+          paddingTop: { md: -10, sm: 0, xs: 20 },
+          justifyContent: 'center',
+          alignItems: 'center',
+          alignContent: 'center'
+        }}
       >
         <Box>
           <h1 className="outline vertical">Web</h1>

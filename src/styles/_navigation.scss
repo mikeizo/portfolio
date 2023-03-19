@@ -1,5 +1,5 @@
 #app {
-  .menu-custom {
+  #menu-custom {
     font-weight: 200;
     a {
       text-decoration: none;
@@ -42,6 +42,7 @@
     a {
       margin: 20px 0;
       font-size: 2rem;
+      font-weight: 200;
       text-align: center;
       text-decoration: none;
     }
@@ -93,6 +94,7 @@
           opacity: 1;
           transition: all 0.5s ease;
           transform-origin: 5px 0px;
+          box-shadow: 0px 0px 25px $black;
         }
       }
       &.open .menu-box {

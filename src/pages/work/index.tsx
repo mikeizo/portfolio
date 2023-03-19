@@ -28,7 +28,7 @@ export async function getStaticProps() {
 function WorkItems({ items }: Items) {
   const workItems = items.map(({ _id, slug, name, logo }: WorkItems) => {
     return (
-      <Grid item key={_id} p={5} xs={12} sm={6} md={4}>
+      <Grid item key={_id} xs={12} sm={6} md={4}>
         <Link href={`work/[slug]`} as={`work/${slug}`}>
           <Box className="work-item">
             <img
@@ -37,7 +37,7 @@ function WorkItems({ items }: Items) {
               alt={name}
             />
           </Box>
-          <Box mt={3}>
+          <Box sx={{ textAlign: 'center', marginTop: 3 }}>
             <p>{name}</p>
           </Box>
         </Link>

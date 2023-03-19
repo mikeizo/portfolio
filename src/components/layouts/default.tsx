@@ -9,6 +9,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles'
 import '@fontsource/poppins/200.css'
 import '@fontsource/poppins/300.css'
 import '@fontsource/poppins/700.css'
+import { red } from '@mui/material/colors'
 
 type Props = {
   children?: ReactNode
@@ -35,7 +36,7 @@ export default function Layout({ children }: Props) {
         <div className="stars" id="stars-md"></div>
         <div className="stars" id="stars-lg"></div>
         <Header />
-        <Container>
+        <Container sx={{ paddingX: 5 }} disableGutters={true}>
           <main>{children}</main>
         </Container>
         {route.pathname !== '/' && <Footer />}

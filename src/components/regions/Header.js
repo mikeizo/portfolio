@@ -7,7 +7,7 @@ import Menu from '@/components/regions/Menu'
 export default function Header() {
   return (
     <header>
-      <Box component="nav" p={5}>
+      <Box component="nav" sx={{ padding: 5 }}>
         <Grid container direction="row" justifyContent="space-between">
           <Grid item>
             <Link href="/">

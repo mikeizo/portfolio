@@ -38,38 +38,34 @@ export default function Navigation() {
   return (
     <>
       <ContactForm contactChange={toggleContact} contact={showContact} />
-      <Hidden smDown>
-        <Box className="menu-custom">
+      <Box id="menu-custom" sx={{ display: { xs: 'none', md: 'block' } }}>
+        <MainMenu />
+        <Box ml={2} display="inline">
+          <a className="btn btn-white" onClick={toggleContact}>
+            Contact
+          </a>
+        </Box>
+      </Box>
+      <Box id="mobile-menu" sx={{ display: { md: 'none', sm: 'block' } }}>
+        <button
+          onClick={toggleMenu}
+          className={`menu-btn ${showMenu ? 'open' : ''}`}
+          aria-label="menu"
+        >
+          <span className="menu-title">menu</span>
+          <span className="menu-box">
+            <span></span>
+            <span></span>
+            <span></span>
+          </span>
+        </button>
+        <Box className={`mobile-menu-body ${showMenu ? 'show' : ''}`}>
           <MainMenu />
-          <Box ml={2} display="inline">
-            <a className="btn btn-white" onClick={toggleContact}>
-              Contact
-            </a>
-          </Box>
+          <a className="btn btn-white" onClick={toggleContact}>
+            Contact
+          </a>
         </Box>
-      </Hidden>
-      <Hidden mdUp>
-        <Box id="mobile-menu">
-          <button
-            onClick={toggleMenu}
-            className={`menu-btn ${showMenu ? 'open' : ''}`}
-            aria-label="menu"
-          >
-            <span className="menu-title">menu</span>
-            <span className="menu-box">
-              <span></span>
-              <span></span>
-              <span></span>
-            </span>
-          </button>
-          <Box className={`mobile-menu-body ${showMenu ? 'show' : ''}`}>
-            <MainMenu />
-            <a className="btn btn-white" onClick={toggleContact}>
-              Contact
-            </a>
-          </Box>
-        </Box>
-      </Hidden>
+      </Box>
     </>
   )
 }
