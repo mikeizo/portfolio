@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useForm, Controller } from 'react-hook-form'
+import axios from 'axios'
 import Box from '@mui/material/Box'
 import TextField from '@mui/material/TextField'
 import Dialog from '@mui/material/Dialog'
@@ -9,7 +10,6 @@ import Button from '@mui/material/Button'
 import IconButton from '@mui/material/IconButton'
 import CloseIcon from '@mui/icons-material/Close'
 import CircularProgress from '@mui/material/CircularProgress'
-import InputLabel from '@mui/material/InputLabel'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 
 type FormValues = {
@@ -45,14 +45,10 @@ export default function ContactForm({
 
   const onSubmit = async (data: any) => {
     setSubmitting(true)
-    await fetch('/api/mail', {
-      body: JSON.stringify({ data }),
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      method: 'POST'
-    })
-      .then(function ({ data }: any) {
+
+    await axios
+      .post('/api/mail', { data })
+      .then(function (response) {
         reset({
           name: '',
           email: '',
@@ -60,7 +56,7 @@ export default function ContactForm({
           comments: ''
         })
         setFormMessage('Your Form has been submitted')
-        return data
+        return response.data
       })
       .catch(function () {
         setFormMessage('Sorry, an error occurred')
