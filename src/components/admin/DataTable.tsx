@@ -1,4 +1,4 @@
-import { MouseEvent, ChangeEvent, useState, SyntheticEvent } from 'react'
+import { MouseEvent, ChangeEvent, useState } from 'react'
 import axios from 'axios'
 import PropTypes from 'prop-types'
 import Link from 'next/link'

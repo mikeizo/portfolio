@@ -9,7 +9,6 @@ import { createTheme, ThemeProvider } from '@mui/material/styles'
 import '@fontsource/poppins/200.css'
 import '@fontsource/poppins/300.css'
 import '@fontsource/poppins/700.css'
-import { red } from '@mui/material/colors'
 
 type Props = {
   children?: ReactNode
