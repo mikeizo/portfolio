@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import Head from 'next/head'
 import Layout from '@/components/layouts/default'
 import Astronaut from '@/components/img/Astronaut'
 import Box from '@mui/material/Box'
@@ -42,6 +43,9 @@ export default function Index() {
 
   return (
     <Layout>
+      <Head>
+        <title>{`${process.env.siteTitle}`}</title>
+      </Head>
       <Astronaut />
       <Box
         className="home-title"
